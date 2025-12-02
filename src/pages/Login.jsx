@@ -47,9 +47,11 @@ function Login() {
         return;
       }
 
-      toast.success("Login Successful!");
-      navigate("/home");
+      // SAVE USER IN LOCAL STORAGE
+      localStorage.setItem("user", JSON.stringify(res.data[0]));
 
+      toast.success("Login Successful!");
+      navigate("/"); // Go to home
     } catch (error) {
       console.error(error);
       toast.error("Server error!");
@@ -87,7 +89,9 @@ function Login() {
           onChange={handleChange}
           className="w-full p-3 bg-[#12263f] text-white rounded-lg mt-4 mb-1"
         />
-        {errors.password && <p className="text-red-400 text-sm">{errors.password}</p>}
+        {errors.password && (
+          <p className="text-red-400 text-sm">{errors.password}</p>
+        )}
 
         <button className="w-full bg-blue-600 mt-6 p-3 rounded-lg text-white hover:bg-blue-700">
           Login
@@ -95,7 +99,10 @@ function Login() {
 
         <p className="text-gray-300 text-sm mt-4 text-center">
           Don't have an account?{" "}
-          <span className="text-blue-400 cursor-pointer" onClick={() => navigate("/")}>
+          <span
+            className="text-blue-400 cursor-pointer"
+            onClick={() => navigate("/register")}
+          >
             Register
           </span>
         </p>

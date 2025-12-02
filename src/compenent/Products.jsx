@@ -1,74 +1,219 @@
-import React from "react";
-import Navbar from "../compenent/Navbar/Navbar";
-
-import {
-  cake1,
-  cake2,
-  cake3,
-  cake4,
-  cake5,
-  cake6,
-  cake7,
-  cake8,
-  Butterscotch_MilkChocolateCake,
-  Chocolate_StrawberryBentoCake,
-  DarkChocolateMousseCake,
-  DutchTruffleCakehalfkg,
-  EgglessDutchTruffleCakehalfkg,
-  EgglessDutchTruffleCakeonekg,
-  FreshFruit_CreamCake,
-  HIGHRESBlueberryCheesecake,
-  NewYorkCheeseCake1,
-  RedVelvetCakehalfkg,
-  StrawberryCustardCake,
-} from "../assets";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import Footer from "./Footer";
 
 function Product() {
-  const cakes = [
-    { img: cake1, name: "Chocolate Cake" },
-    { img: cake2, name: "Strawberry Cake" },
-    { img: cake3, name: "Vanilla Cake" },
-    { img: cake4, name: "Party Mix Cake" },
-    { img: cake5, name: "Creamy Delight" },
-    { img: cake6, name: "Special Chocolate" },
-    { img: cake7, name: "Fruit Special" },
-    { img: cake8, name: "Premium Cake" },
-    { img: Butterscotch_MilkChocolateCake, name: "Butterscotch MilkChoco" },
-    { img: Chocolate_StrawberryBentoCake, name: "Choco Strawberry Bento" },
-    { img: DarkChocolateMousseCake, name: "Dark Chocolate Mousse" },
-    { img: DutchTruffleCakehalfkg, name: "Dutch Truffle Cake" },
-    { img: EgglessDutchTruffleCakehalfkg, name: "Eggless Truffle Cake" },
-    { img: EgglessDutchTruffleCakeonekg, name: "Eggless Truffle 1KG" },
-    { img: FreshFruit_CreamCake, name: "Fresh Fruit Cream Cake" },
-    { img: HIGHRESBlueberryCheesecake, name: "Blueberry Cheesecake" },
-    { img: NewYorkCheeseCake1, name: "NY Cheesecake" },
-    { img: RedVelvetCakehalfkg, name: "Red Velvet" },
-    { img: StrawberryCustardCake, name: "Strawberry Custard" },
-  ];
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const searchQuery = params.get("search") || "";
+    setSearchTerm(searchQuery);
+
+    fetchProducts(searchQuery);
+  }, [location.search]);
+  
+  const fetchProducts = async (searchQuery) => {
+    try {
+      const response = await fetch("http://localhost:3001/products");
+      const data = await response.json();
+
+      setProducts(data);
+      filterProducts(data, searchQuery);
+    } catch (error) {
+      toast.error("Failed to load products from server!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterProducts = (list, term) => {
+    if (!term.trim()) {
+      setFilteredProducts(list);
+      return;
+    }
+
+    const filtered = list.filter(
+      (p) =>
+        p.name.toLowerCase().includes(term.toLowerCase()) ||
+        p.category.toLowerCase().includes(term.toLowerCase())
+    );
+
+    setFilteredProducts(filtered);
+  };
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    filterProducts(products, value);
+  };
+
+  const addToCart = async (item) => {
+    if (!user) {
+      toast.error("Please login to add items to cart");
+      navigate("/login");
+      return;
+    }
+
+    const cartItem = {
+      userId: user.id,
+      productId: item.id,
+      productName: item.name,
+      price: item.price,
+      quantity: 1,
+      image: item.image,
+      date: new Date().toISOString(),
+    };
+
+    try {
+      await fetch("http://localhost:3001/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cartItem),
+      });
+
+      let oldCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existing = oldCart.find((c) => c.id === item.id);
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        oldCart.push({ ...item, quantity: 1 });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(oldCart));
+      window.dispatchEvent(new Event("storage"));
+      toast.success(`${item.name} added to cart`);
+    } catch (error) {
+      toast.error("Failed to add item to cart!");
+    }
+  };
+
+  const addToWishlist = async (item) => {
+    if (!user) {
+      toast.error("Please login to add items to wishlist");
+      navigate("/login");
+      return;
+    }
+
+    const wishItem = {
+      userId: user.id,
+      productId: item.id,
+      productName: item.name,
+      price: item.price,
+      image: item.image,
+      date: new Date().toISOString(),
+    };
+
+    try {
+      await fetch("http://localhost:3001/wishlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(wishItem),
+      });
+
+      let oldWish = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const exists = oldWish.find((w) => w.id === item.id);
+
+      if (!exists) oldWish.push(item);
+
+      localStorage.setItem("wishlist", JSON.stringify(oldWish));
+      window.dispatchEvent(new Event("storage"));
+      toast.success(`${item.name} added to wishlist`);
+    } catch (error) {
+      toast.error("Failed to add item to wishlist!");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center text-xl text-amber-600">
+        Loading products...
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#0a0f1c] text-white">
-      
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="container mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+            Our Delicious Cakes
+          </h1>
 
-      <div className="p-6">
-        <h1 className="text-3xl font-bold mb-8">Our Cakes</h1>
+          <div className="relative max-w-md">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearch}
+              placeholder="Search cakes..."
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+              🔍
+            </span>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {cakes.map((item, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredProducts.map((item) => (
             <div
-              key={index}
-              className="p-3 bg-[#112240]/60 rounded-xl shadow-lg hover:scale-105 duration-300"
+              key={item.id}
+              className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
             >
-              <img
-                src={item.img}
-                className="w-full h-40 object-cover rounded-lg"
-                alt={item.name}
-              />
-              <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
+              <div className="relative">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-48 object-cover"
+                />
+                <span className="absolute top-3 left-3 bg-amber-500 text-white px-2 py-1 rounded text-xs">
+                  {item.category}
+                </span>
+              </div>
+
+              <div className="p-4">
+                <h3 className="text-lg font-semibold">{item.name}</h3>
+                <p className="text-amber-600 font-bold text-xl mb-3">
+                  ₹{item.price}
+                </p>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => addToCart(item)}
+                    className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-lg"
+                  >
+                    Add to Cart
+                  </button>
+
+                  <button
+                    onClick={() => addToWishlist(item)}
+                    className="w-12 bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg"
+                  >
+                    ♡
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
+
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-12 text-gray-500 text-lg">
+            No cakes found.
+          </div>
+        )}
       </div>
+      <Footer />
     </div>
   );
 }

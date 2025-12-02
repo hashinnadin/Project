@@ -8,51 +8,243 @@
     },
     {
       "id": "899d",
-      "username": "Hashin21",
-      "email": "hashinnadin@gmail.com",
+      "username": "TestUser",
+      "email": "test@example.com",
       "password": "123456"
     },
     {
-      "id": "4fda",
-      "username": "loyid",
-      "email": "loyid@gmail.com",
-      "password": "1234"
-    },
-    {
-      "id": "9d39",
+      "id": "0681",
       "username": "Hashin21",
       "email": "hashinnadin@gmail.com",
       "password": "1234"
     },
     {
-      "id": "060a",
+      "id": "bda2",
       "username": "Hashin21",
-      "email": "hashinnadin@gmail.com",
+      "email": "h@gmail.com",
       "password": "1234"
     },
     {
-      "id": "2271",
-      "username": "Hashin21",
-      "email": "hashinnadin@gmail.com",
-      "password": "1234"
-    },
-    {
-      "id": "568e",
-      "username": "Hashin21",
-      "email": "hashinnadin@gmail.com",
+      "id": "df60",
+      "username": "Hashin",
+      "email": "hashinnadin1@gmail.com",
       "password": "12345"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Straw Velvet Cake",
+      "price": 800,
+      "category": "Premium",
+      "description": "Soft strawberry velvet cake layered with rich cream.",
+      "image": "/cake/cake1.avif",
+      "rating": 4.8
     },
     {
-      "id": "4ac4",
-      "username": "Hashin21",
-      "email": "hashinnadin@gmail.com",
-      "password": "12345"
+      "id": "2",
+      "name": "Choco Cream Cake",
+      "price": 750,
+      "category": "Classic",
+      "description": "Rich chocolate sponge filled with creamy chocolate frosting.",
+      "image": "/cake/cake2.avif",
+      "rating": 4.5
     },
     {
-      "id": "6d70",
-      "username": "hashi ",
-      "email": "hashinnadin@gmail.com",
-      "password": "12345"
+      "id": "3",
+      "name": "Black Forest Cake",
+      "price": 900,
+      "category": "Premium",
+      "description": "Classic German black forest with cherries and cream.",
+      "image": "/cake/cake3.avif",
+      "rating": 4.9
+    },
+    {
+      "id": "4",
+      "name": "Party Mix Cake",
+      "price": 900,
+      "category": "Party",
+      "description": "Colorful cake perfect for celebrations and birthdays.",
+      "image": "/cake/cake4.avif",
+      "rating": 4.7
+    },
+    {
+      "id": "5",
+      "name": "Creamy Delight",
+      "price": 500,
+      "category": "Classic",
+      "description": "Light and creamy vanilla delicacy.",
+      "image": "/cake/cake5.webp",
+      "rating": 4.3
+    },
+    {
+      "id": "6",
+      "name": "Special Chocolate Cake",
+      "price": 650,
+      "category": "Premium",
+      "description": "Rich chocolate cake topped with dark chocolate glaze.",
+      "image": "/cake/cake6.jpg",
+      "rating": 4.6
+    },
+    {
+      "id": "7",
+      "name": "Strawberry Delight Cake",
+      "price": 780,
+      "category": "Fruit",
+      "description": "Fresh strawberry cake topped with cream frosting.",
+      "image": "/cake/cake7.jpg",
+      "rating": 4.4
+    },
+    {
+      "id": "8",
+      "name": "Plum Cake",
+      "price": 800,
+      "category": "Seasonal",
+      "description": "Traditional plum cake with dry fruits and spices.",
+      "image": "/cake/cake8.jpg",
+      "rating": 4.6
+    },
+    {
+      "id": "9",
+      "name": "Butterscotch Milk Chocolate Cake",
+      "price": 850,
+      "category": "Special",
+      "description": "Creamy butterscotch cake fused with milk chocolate.",
+      "image": "/cake/Butterscotch_MilkChocolateCake.webp",
+      "rating": 4.7
+    },
+    {
+      "id": "10",
+      "name": "Chocolate Strawberry Bento Cake",
+      "price": 950,
+      "category": "Premium",
+      "description": "Mini bento chocolate cake with fresh strawberry topping.",
+      "image": "/cake/Chocolate_StrawberryBentoCake.jpg",
+      "rating": 4.8
+    },
+    {
+      "id": "11",
+      "name": "Dark Chocolate Mousse Cake",
+      "price": 1000,
+      "category": "Premium",
+      "description": "Smooth mousse layered with rich dark chocolate.",
+      "image": "/cake/DarkChocolateMousseCake.webp",
+      "rating": 4.9
+    },
+    {
+      "id": "12",
+      "name": "Dutch Truffle Cake Half KG",
+      "price": 800,
+      "category": "Premium",
+      "description": "Chocolate truffle cake with silky ganache.",
+      "image": "/cake/DutchTruffleCakehalfkg.webp",
+      "rating": 4.7
+    },
+    {
+      "id": "13",
+      "name": "Eggless Dutch Truffle Cake Half KG",
+      "price": 780,
+      "category": "Eggless",
+      "description": "Completely eggless chocolate truffle cake.",
+      "image": "/cake/EgglessDutchTruffleCakehalfkg.webp",
+      "rating": 4.6
+    },
+    {
+      "id": "14",
+      "name": "Eggless Dutch Truffle Cake 1 KG",
+      "price": 1200,
+      "category": "Eggless",
+      "description": "Large eggless truffle cake perfect for parties.",
+      "image": "/cake/EgglessDutchTruffleCakeonekg.webp",
+      "rating": 4.8
+    },
+    {
+      "id": "15",
+      "name": "Fresh Fruit Cream Cake",
+      "price": 850,
+      "category": "Fruit",
+      "description": "Seasonal mixed fruits layered over fresh cream.",
+      "image": "/cake/FreshFruit_CreamCake.webp",
+      "rating": 4.7
+    },
+    {
+      "id": "16",
+      "name": "Blueberry Cheesecake",
+      "price": 900,
+      "category": "Cheesecake",
+      "description": "Creamy New York cheesecake topped with blueberry compote.",
+      "image": "/cake/HIGHRESBlueberryCheesecake-Square.webp",
+      "rating": 4.8
+    },
+    {
+      "id": "17",
+      "name": "New York Cheesecake",
+      "price": 950,
+      "category": "Cheesecake",
+      "description": "Classic New York style cheesecake with rich flavour.",
+      "image": "/cake/NewYorkCheeseCake1.webp",
+      "rating": 4.9
+    },
+    {
+      "id": "18",
+      "name": "Red Velvet Cake",
+      "price": 850,
+      "category": "Premium",
+      "description": "Moist red velvet cake with smooth cream cheese frosting.",
+      "image": "/cake/RedVelvetCakehalfkg.jpg",
+      "rating": 4.8
+    },
+    {
+      "id": "19",
+      "name": "Strawberry Custard Cake",
+      "price": 750,
+      "category": "Fruit",
+      "description": "Fresh strawberry and creamy custard combination.",
+      "image": "/cake/StrawberryCustardCake.webp",
+      "rating": 4.5
+    }
+  ],
+  "cart": [
+    {
+      "id": "6802",
+      "userId": "0681",
+      "productId": "2",
+      "productName": "Choco Cream Cake",
+      "price": 750,
+      "quantity": 1,
+      "image": "/cake/cake2.avif",
+      "date": "2025-12-02T07:03:31.942Z"
+    }
+  ],
+  "wishlist": [],
+  "orders": [
+    {
+      "id": "9692",
+      "userId": "0681",
+      "items": [
+        {
+          "id": "3",
+          "name": "Black Forest Cake",
+          "price": 900,
+          "quantity": 2,
+          "image": "/cake/cake3.avif",
+          "dbId": "e323"
+        },
+        {
+          "id": "2",
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 2,
+          "image": "/cake/cake2.avif",
+          "dbId": "3272"
+        }
+      ],
+      "totalAmount": 3515,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "orderDate": "2025-12-02T07:03:07.828Z",
+      "deliveryAddress": "User address here",
+      "status": "processing"
     }
   ]
 }

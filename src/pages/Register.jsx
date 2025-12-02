@@ -21,27 +21,31 @@ function Register() {
       [e.target.name]: e.target.value,
     });
   };
-
-
-  
   const validateForm = () => {
     let newErrors = {};
 
     if (!form.username.trim()) newErrors.username = "Username is required";
-    if (!form.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(form.email))
+
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
       newErrors.email = "Invalid email format";
+    }
 
-    if (!form.password.trim()) newErrors.password = "Password is required";
+    if (!form.password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (form.password.length < 4) {
+      newErrors.password = "Password must be at least 4 characters";
+    }
 
-    if (!form.confirmPassword.trim())
+    if (!form.confirmPassword.trim()) {
       newErrors.confirmPassword = "Confirm password is required";
-    else if (form.password !== form.confirmPassword)
+    } else if (form.password !== form.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
+    }
 
     return newErrors;
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -50,7 +54,14 @@ function Register() {
 
     if (Object.keys(validationErrors).length !== 0) return;
 
-    try {
+    try {      const userCheck = await axios.get(
+        `http://localhost:3000/users?email=${form.email}`
+      );
+
+      if (userCheck.data.length > 0) {
+        toast.error("Email already registered!");
+        return;
+      }
       await axios.post("http://localhost:3000/users", {
         username: form.username,
         email: form.email,
@@ -59,25 +70,21 @@ function Register() {
 
       toast.success("Registration Successful!");
       navigate("/login");
-
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong!");
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0f1c]">
       <form
         onSubmit={handleSubmit}
-        className="w-96 p-8 rounded-2xl shadow-2xl 
-        bg-gradient-to-br from-[#0d1b2a] via-[#112240] to-[#0a1a33] border border-[#1f355a]"
+        className="w-96 p-8 rounded-2xl shadow-2xl bg-gradient-to-br
+        from-[#0d1b2a] via-[#112240] to-[#0a1a33] border border-[#1f355a]"
       >
         <h2 className="text-3xl font-bold text-center mb-6 text-white">
           Register
         </h2>
-
-        {/* USERNAME */}
         <input
           type="text"
           name="username"
@@ -86,9 +93,9 @@ function Register() {
           onChange={handleChange}
           className="w-full p-3 bg-[#12263f] text-white rounded-lg mb-1"
         />
-        {errors.username && <p className="text-red-400 text-sm">{errors.username}</p>}
-
-        {/* EMAIL */}
+        {errors.username && (
+          <p className="text-red-400 text-sm">{errors.username}</p>
+        )}
         <input
           type="email"
           name="email"
@@ -97,9 +104,9 @@ function Register() {
           onChange={handleChange}
           className="w-full p-3 bg-[#12263f] text-white rounded-lg mt-4 mb-1"
         />
-        {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
-
-        {/* PASSWORD */}
+        {errors.email && (
+          <p className="text-red-400 text-sm">{errors.email}</p>
+        )}
         <input
           type="password"
           name="password"
@@ -108,9 +115,9 @@ function Register() {
           onChange={handleChange}
           className="w-full p-3 bg-[#12263f] text-white rounded-lg mt-4 mb-1"
         />
-        {errors.password && <p className="text-red-400 text-sm">{errors.password}</p>}
-
-        {/* CONFIRM PASSWORD */}
+        {errors.password && (
+          <p className="text-red-400 text-sm">{errors.password}</p>
+        )}
         <input
           type="password"
           name="confirmPassword"
@@ -129,7 +136,10 @@ function Register() {
 
         <p className="text-gray-300 text-sm mt-4 text-center">
           Already have an account?{" "}
-          <span className="text-blue-400 cursor-pointer" onClick={() => navigate("/login")}>
+          <span
+            className="text-blue-400 cursor-pointer"
+            onClick={() => navigate("/login")}
+          >
             Login
           </span>
         </p>

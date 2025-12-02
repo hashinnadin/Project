@@ -1,101 +1,141 @@
-import React, { useEffect } from "react";
-import {
-  cake1,
-  cake2,
-  cake3,
-  cake4,
-  cake6,
-  Butterscotch_MilkChocolateCake,
-  DarkChocolateMousseCake,
-  DutchTruffleCakehalfkg,
-} from "../assets";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Footer from "../compenent/Footer";
 
 function Home() {
-  const featuredCakes = [
-    { img: cake1, name: "Chocolate Cake" },
-    { img: cake2, name: "Strawberry Cake" },
-    { img: cake3, name: "Vanilla Cake" },
-    { img: cake4, name: "Party Mix Cake" },
-    { img: cake6, name: "Special Chocolate" },
-    { img: Butterscotch_MilkChocolateCake, name: "Butterscotch MilkChoco" },
-    { img: DarkChocolateMousseCake, name: "Dark Chocolate Mousse" },
-    { img: DutchTruffleCakehalfkg, name: "Dutch Truffle Cake" },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/products?_limit=6");
+        setProducts(res.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to load highlight cakes");
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const addToCart = (item) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      toast.error("Please login to add items to cart");
+      navigate("/login");
+      return;
+    }
+
+    const oldCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItem = oldCart.find((c) => c.id === item.id);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      oldCart.push({ ...item, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(oldCart));
+    toast.success(`${item.name} added to cart`);
+  };
+
+  const addToWishlist = (item) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      toast.error("Please login to add items to wishlist");
+      navigate("/login");
+      return;
+    }
+
+    const oldWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const exists = oldWishlist.find((w) => w.id === item.id);
+
+    if (exists) {
+      toast.info("Already in wishlist");
+      return;
+    }
+
+    oldWishlist.push(item);
+    localStorage.setItem("wishlist", JSON.stringify(oldWishlist));
+    toast.success(`${item.name} added to wishlist`);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl">
+        Loading featured cakes...
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#0a0f1c] text-white">
-{/* 🌟 HERO SECTION WITHOUT VIDEO */}
-<section className="w-full text-center py-16 bg-[#0a0f1c]">
-  <h1
-    className="text-4xl md:text-5xl font-extrabold"
-    data-aos="fade-down"
-  >
-    Welcome to <span className="text-blue-400">BakeHub</span>
-  </h1>
+    <div className="min-h-screen bg-white text-gray-900">
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
 
-  <p className="text-gray-300 mt-3 text-lg" data-aos="fade-up">
-    Delicious • Fresh • Daily Baked Cakes
-  </p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Featured Cakes</h2>
+            <p className="text-gray-600 text-lg">
+              Our best-selling handcrafted cakes, just for you
+            </p>
 
-  <button
-    className="mt-5 px-6 py-3 bg-blue-500 rounded-lg hover:bg-blue-600 text-white"
-    data-aos="zoom-in"
-  >
-    Explore Cakes
-  </button>
-</section>
-
-{/* 🍰 FULL WIDTH PREMIUM BANNER BELOW HERO */}
-<div className="w-full mt-0">
-  <img
-    src="/images/hero-cake.jpg"
-    alt="Premium Cake Banner"
-    className="w-full h-[350px] md:h-[500px] object-cover rounded-none"
-    data-aos="fade-up"
-  />
-</div>
-
-      {/* 🎂 Cakes Section (Lag-Free) */}
-      <section className="px-6 my-12">
-        <h2 className="text-3xl font-bold mb-8" data-aos="fade-right">
-          Featured Cakes
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-          {featuredCakes.map((item, index) => (
-            <div
-              key={index}
-              data-aos="fade-up"
-              data-aos-delay={index * 60}   // ⬅ small delay, smooth
-              className="bg-[#112240]/70 rounded-xl shadow-xl overflow-hidden 
-              hover:scale-[1.04] transition-all duration-300"
+            <button
+              onClick={() => navigate("/products")}
+              className="mt-5 bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-semibold transition-all"
             >
-              {/* Optimized Cake Image */}
-              <img
-                src={item.img}
-                loading="lazy"               // ⬅ reduces lag a LOT
-                className="w-full h-64 object-cover"
-                alt={item.name}
-              />
+              View All Cakes →
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products.map((cake) => (
+              <div
+                key={cake.id}
+                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+              >
+                <img
+                  src={cake.image}
+                  alt={cake.name}
+                  className="w-full h-56 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold">{cake.name}</h3>
+                  <p className="text-gray-500 text-sm mt-1">{cake.category}</p>
 
-              <div className="p-4 text-center">
-                <h3 className="text-xl font-semibold">{item.name}</h3>
-                <button className="mt-3 w-full py-2 bg-blue-500 hover:bg-blue-600 rounded-lg">
-                  Order Now
-                </button>
+                  <p className="text-lg font-bold mt-3">₹{cake.price}</p>
+
+                  <p className="text-gray-600 text-sm mt-2">
+                    {cake.description}
+                  </p>
+                  <div className="flex gap-2 mt-4">
+                    <button
+                      onClick={() => addToCart(cake)}
+                      className="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-lg font-semibold transition-colors"
+                    >
+                      Add to Cart
+                    </button>
+
+                    <button
+                      onClick={() => addToWishlist(cake)}
+                      className="w-12 bg-gray-200 hover:bg-gray-300 py-2 rounded-lg transition-all"
+                    >
+                      ♡
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-[#112240] py-6 text-center mt-16">
-        <h2 className="text-xl font-bold">BakeHub</h2>
-        <p className="text-gray-400 text-sm mt-1">
-          © 2025 BakeHub. All Rights Reserved.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

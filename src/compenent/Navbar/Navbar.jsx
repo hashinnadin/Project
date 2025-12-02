@@ -1,71 +1,254 @@
-import React from "react";
-import { logo } from "../../assets";
-import { useNavigate } from "react-router-dom";
-import { FaSearch, FaShoppingCart } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import logo from "../../assets/logo.png"; 
+import { useNavigate, useLocation } from "react-router-dom";
+import { FaSearch, FaShoppingCart, FaHeart, FaSignOutAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [cartCount, setCartCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    setUser(userData);
+
+    const updateCounts = () => {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+      const cartTotal = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+
+      setCartCount(cartTotal);
+      setWishlistCount(wishlist.length);
+    };
+
+    updateCounts();
+    window.addEventListener("storage", updateCounts);
+
+    return () => window.removeEventListener("storage", updateCounts);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("cart");
+    localStorage.removeItem("wishlist");
+    
+    setUser(null);
+    setCartCount(0);
+    setWishlistCount(0);
+
+    toast.success("Logged out successfully!");
+    navigate("/login");
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${searchTerm}`);
+      setSearchTerm("");
+    }
+  };
+
+  const handleCartClick = () => {
+    if (!user) {
+      toast.error("Please login to view your cart");
+      navigate("/login");
+    } else {
+      navigate("/cart");
+    }
+  };
+
+  const handleWishlistClick = () => {
+    if (!user) {
+      toast.error("Please login to view your wishlist");
+      navigate("/login");
+    } else {
+      navigate("/wishlist");
+    }
+  };
+
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="w-full bg-[#0d1b2a] flex items-center justify-between px-6 py-4 shadow-lg">
-
-      {/* Left: Logo */}
-      <div
-        className="flex items-center gap-3 cursor-pointer"
-        onClick={() => navigate("/home")}
-      >
-        <img src={logo} className="w-14 h-14 rounded-full" alt="logo" />
+    <nav className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <div className="bg-amber-600 text-white py-2 text-center text-sm">
+        🚚 Free delivery above ₹999 | 🎁 Special discounts for new customers
       </div>
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between py-4">
+          <div
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <img src={logo} className="w-12 h-12 rounded-full" alt="BakeHub Logo" />
+            <span className="text-2xl font-bold text-amber-800 hidden sm:block">
+              BakeHub
+            </span>
+          </div>
+          <div className="hidden md:flex flex-1 max-w-md mx-4">
+            <form onSubmit={handleSearch} className="relative w-full">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search cakes..."
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+              />
+              <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2">
+                <FaSearch className="text-gray-500" />
+              </button>
+            </form>
+          </div>
+          <ul className="hidden lg:flex items-center gap-8 text-gray-700 text-lg">
+            <li
+              className={`cursor-pointer hover:text-amber-600 ${
+                isActive("/") ? "text-amber-600 font-semibold" : ""
+              }`}
+              onClick={() => navigate("/")}
+            >
+              Home
+            </li>
 
-      {/* CENTER MENU */}
-      <ul className="hidden md:flex items-center justify-center gap-10 text-white text-lg flex-1">
-        <li
-          className="hover:text-blue-400 cursor-pointer"
-          onClick={() => navigate("/home")}
-        >
-          Home
-        </li>
+            <li
+              className={`cursor-pointer hover:text-amber-600 ${
+                isActive("/products") ? "text-amber-600 font-semibold" : ""
+              }`}
+              onClick={() => navigate("/products")}
+            >
+              All Cakes
+            </li>
+          </ul>
+          <div className="flex items-center gap-6">
+            <button 
+              className="md:hidden text-gray-600 hover:text-amber-600"
+              onClick={() => navigate("/products")}
+            >
+              <FaSearch className="text-lg" />
+            </button>
+            <div
+              className="relative cursor-pointer flex items-center gap-2 text-gray-600 hover:text-amber-600"
+              onClick={handleWishlistClick}
+            >
+              <FaHeart />
+              <span className="hidden sm:block text-sm">Wishlist</span>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </div>
+            <div
+              className="relative cursor-pointer flex items-center gap-2 text-gray-600 hover:text-amber-600"
+              onClick={handleCartClick}
+            >
+              <FaShoppingCart />
+              <span className="hidden sm:block text-sm">Cart</span>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-amber-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </div>
+            {user ? (
+              <div className="flex items-center gap-4">
+                <span className="hidden md:block text-gray-700 font-medium">
+                  Hi, {user.username}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+                >
+                  <FaSignOutAlt />
+                  <span className="hidden sm:inline">Logout</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-medium"
+              >
+                Login
+              </button>
+            )}
+            <button
+              className="lg:hidden text-gray-600 hover:text-amber-600"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <div className="text-2xl">☰</div>
+            </button>
+          </div>
+        </div>
+        {isMenuOpen && (
+          <div className="lg:hidden border-t py-4 bg-white">
+            <div className="flex flex-col space-y-4">
 
-        <li
-          className="hover:text-blue-400 cursor-pointer"
-          onClick={() => navigate("/products")}
-        >
-          Special Cakes
-        </li>
+              <div
+                className={`cursor-pointer ${
+                  isActive("/") ? "text-amber-600" : "text-gray-700"
+                }`}
+                onClick={() => {
+                  navigate("/");
+                  setIsMenuOpen(false);
+                }}
+              >
+                Home
+              </div>
 
-        {/* Search */}
-        <li className="hover:text-blue-400 cursor-pointer flex items-center gap-2">
-          <FaSearch className="text-xl" />
-          Search
-        </li>
+              <div
+                className={`cursor-pointer ${
+                  isActive("/products") ? "text-amber-600" : "text-gray-700"
+                }`}
+                onClick={() => {
+                  navigate("/products");
+                  setIsMenuOpen(false);
+                }}
+              >
+                All Cakes
+              </div>
 
-        {/* Cart */}
-        <li className="hover:text-blue-400 cursor-pointer flex items-center gap-2">
-          <FaShoppingCart className="text-xl" />
-          Cart
-        </li>
-      </ul>
+              <div className="cursor-pointer text-gray-700" onClick={handleWishlistClick}>
+                Wishlist
+              </div>
 
-      {/* RIGHT: Register & Login */}
-      <div className="hidden md:flex items-center gap-6 text-white text-lg">
+              <div className="cursor-pointer text-gray-700" onClick={handleCartClick}>
+                Cart
+              </div>
+              <div className="border-t pt-4 flex flex-col space-y-3">
+                {user ? (
+                  <>
+                    <div className="text-gray-700 font-medium">
+                      Welcome, {user.username}
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => {
+                      navigate("/login");
+                      setIsMenuOpen(false);
+                    }}
+                    className="bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg"
+                  >
+                    Login
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
-        <button
-          onClick={() => navigate("/")}
-          className="hover:text-blue-400"
-        >
-          Register
-        </button>
-
-        <button
-          onClick={() => navigate("/login")}
-          className="hover:text-blue-400"
-        >
-          Login
-        </button>
       </div>
-
-      {/* Mobile Menu */}
-      <div className="md:hidden text-white text-3xl">☰</div>
     </nav>
   );
 }
