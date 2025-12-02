@@ -41,7 +41,6 @@ function Cart() {
     }
   };
 
-  // UPDATE QUANTITY 
   const updateQuantity = async (productId, qty) => {
     if (qty < 1) return;
 
@@ -201,16 +200,7 @@ function Cart() {
                 <span>Subtotal</span>
                 <span>₹{subtotal.toFixed(2)}</span>
               </div>
-{/* 
-               <div className="flex justify-between">
-                <span>Delivery Fee</span>
-                <span>₹50.00</span>
-              </div> */}
 
-              {/* <div className="flex justify-between">
-                <span>Tax (5%)</span>
-                <span>₹{tax.toFixed(2)}</span>
-              </div>  */}
 
               <div className="border-t pt-3 flex justify-between font-bold text-xl">
                 <span>Total</span>

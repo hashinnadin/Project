@@ -46,12 +46,10 @@ function Login() {
         toast.error("Invalid email or password");
         return;
       }
-
-      // SAVE USER IN LOCAL STORAGE
       localStorage.setItem("user", JSON.stringify(res.data[0]));
 
       toast.success("Login Successful!");
-      navigate("/"); // Go to home
+      navigate("/");
     } catch (error) {
       console.error(error);
       toast.error("Server error!");
@@ -69,7 +67,6 @@ function Login() {
           Login
         </h2>
 
-        {/* EMAIL */}
         <input
           type="email"
           name="email"
@@ -80,7 +77,6 @@ function Login() {
         />
         {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
 
-        {/* PASSWORD */}
         <input
           type="password"
           name="password"
@@ -110,5 +106,4 @@ function Login() {
     </div>
   );
 }
-
 export default Login;

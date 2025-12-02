@@ -54,7 +54,7 @@ function Register() {
 
     if (Object.keys(validationErrors).length !== 0) return;
 
-    try {      const userCheck = await axios.get(
+    try {const userCheck = await axios.get(
         `http://localhost:3001/users?email=${form.email}`
       );
 
