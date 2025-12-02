@@ -13,7 +13,7 @@ function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/products?_limit=6");
+        const res = await axios.get("http://localhost:3001/products?_limit=6");
         setProducts(res.data);
         setLoading(false);
       } catch (error) {

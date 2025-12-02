@@ -39,7 +39,7 @@ function Login() {
 
     try {
       const res = await axios.get(
-        `http://localhost:3000/users?email=${form.email}&password=${form.password}`
+        `http://localhost:3001/users?email=${form.email}&password=${form.password}`
       );
 
       if (res.data.length === 0) {

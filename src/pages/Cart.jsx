@@ -16,9 +16,6 @@ function Cart() {
     loadCart();
   }, []);
 
-  // -----------------------------
-  // FETCH CART FROM PORT 3001
-  // -----------------------------
   const loadCart = async () => {
     try {
       const response = await fetch(
@@ -44,9 +41,7 @@ function Cart() {
     }
   };
 
-  // -----------------------------
-  // UPDATE QUANTITY (PORT 3001)
-  // -----------------------------
+  // UPDATE QUANTITY 
   const updateQuantity = async (productId, qty) => {
     if (qty < 1) return;
 
@@ -73,9 +68,6 @@ function Cart() {
     }
   };
 
-  // -----------------------------
-  // REMOVE ITEM (PORT 3001)
-  // -----------------------------
   const removeItem = async (productId) => {
     const item = cartItems.find((i) => i.id === productId);
 
@@ -99,9 +91,7 @@ function Cart() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const deliveryFee = 50;
-  const tax = subtotal * 0.05;
-  const finalTotal = subtotal + deliveryFee + tax;
+
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {
@@ -111,7 +101,6 @@ function Cart() {
     navigate("/payment");
   };
 
-  // Loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-xl text-amber-600">
@@ -120,7 +109,6 @@ function Cart() {
     );
   }
 
-  // Empty cart
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 text-center p-10">
@@ -136,7 +124,6 @@ function Cart() {
     );
   }
 
-  // Main UI
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="container mx-auto max-w-6xl">
@@ -214,21 +201,21 @@ function Cart() {
                 <span>Subtotal</span>
                 <span>₹{subtotal.toFixed(2)}</span>
               </div>
-
-              <div className="flex justify-between">
+{/* 
+               <div className="flex justify-between">
                 <span>Delivery Fee</span>
                 <span>₹50.00</span>
-              </div>
+              </div> */}
 
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <span>Tax (5%)</span>
                 <span>₹{tax.toFixed(2)}</span>
-              </div>
+              </div>  */}
 
               <div className="border-t pt-3 flex justify-between font-bold text-xl">
                 <span>Total</span>
                 <span className="text-amber-600">
-                  ₹{finalTotal.toFixed(2)}
+                  ₹{subtotal.toFixed(2)}
                 </span>
               </div>
             </div>

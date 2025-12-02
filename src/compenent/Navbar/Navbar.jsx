@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "../../assets/logo.png"; 
+import logo from "../../assets/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaSearch, FaShoppingCart, FaHeart, FaSignOutAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -77,9 +77,9 @@ function Navbar() {
 
   return (
     <nav className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-      <div className="bg-amber-600 text-white py-2 text-center text-sm">
+      {/* <div className="bg-amber-600 text-white py-2 text-center text-sm">
         🚚 Free delivery above ₹999 | 🎁 Special discounts for new customers
-      </div>
+      </div> */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           <div
@@ -91,7 +91,7 @@ function Navbar() {
               BakeHub
             </span>
           </div>
-          <div className="hidden md:flex flex-1 max-w-md mx-4">
+          {/* <div className="hidden md:flex flex-1 max-w-md mx-4">
             <form onSubmit={handleSearch} className="relative w-full">
               <input
                 type="text"
@@ -104,7 +104,7 @@ function Navbar() {
                 <FaSearch className="text-gray-500" />
               </button>
             </form>
-          </div>
+          </div> */}
           <ul className="hidden lg:flex items-center gap-8 text-gray-700 text-lg">
             <li
               className={`cursor-pointer hover:text-amber-600 ${

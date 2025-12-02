@@ -9,7 +9,7 @@ function Payment() {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [loading, setLoading] = useState(false);
 
-  // Payment fields
+
   const [formData, setFormData] = useState({
     cardNumber: "",
     expiryDate: "",
@@ -20,7 +20,6 @@ function Payment() {
 
   const [errors, setErrors] = useState({});
 
-  // Address fields (required for both card & UPI)
   const [address, setAddress] = useState({
     fullName: "",
     mobile: "",
@@ -30,6 +29,14 @@ function Payment() {
     pincode: "",
     state: "",
   });
+ const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+  const deliveryFee = 50;
+  const tax = subtotal * 0.05;
+  const finalTotal = subtotal + deliveryFee + tax;
 
   const [addressErrors, setAddressErrors] = useState({});
 
@@ -143,7 +150,7 @@ function Payment() {
         paymentStatus: "completed",
         address,
         date: new Date().toISOString(),
-        status: "processing",
+        status: "Success",
       };
 
       await fetch("http://localhost:3001/orders", {
