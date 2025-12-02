@@ -77,6 +77,31 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
+      
+      {/* Cake Notes / Hero Banner */}
+<div 
+  className="w-full h-[280px] md:h-[350px] bg-gradient-to-r from-amber-500 to-orange-600 
+  flex items-center justify-center text-center px-6 animate__animated animate__fadeIn"
+>
+  <div>
+    <h1 className="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg">
+      Freshly Baked Happiness, Just for You! 🎂
+    </h1>
+
+    <p className="text-white text-lg md:text-xl mt-4 opacity-90">
+      Handcrafted cakes made with love, quality ingredients, and a touch of magic ✨
+    </p>
+
+    <button
+      onClick={() => navigate('/products')}
+      className="mt-6 bg-white text-amber-700 font-semibold px-6 py-3 rounded-lg shadow-lg 
+      hover:bg-amber-100 transition-all duration-300"
+    >
+      Explore All Cakes →
+    </button>
+  </div>
+</div>
+
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-6">
 
@@ -86,12 +111,7 @@ function Home() {
               Our best-selling handcrafted cakes, just for you
             </p>
 
-            <button
-              onClick={() => navigate("/products")}
-              className="mt-5 bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-semibold transition-all"
-            >
-              View All Cakes →
-            </button>
+          
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((cake) => (

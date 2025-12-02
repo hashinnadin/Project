@@ -204,18 +204,7 @@
       "rating": 4.5
     }
   ],
-  "cart": [
-    {
-      "id": "6802",
-      "userId": "0681",
-      "productId": "2",
-      "productName": "Choco Cream Cake",
-      "price": 750,
-      "quantity": 1,
-      "image": "/cake/cake2.avif",
-      "date": "2025-12-02T07:03:31.942Z"
-    }
-  ],
+  "cart": [],
   "wishlist": [],
   "orders": [
     {
@@ -245,6 +234,30 @@
       "orderDate": "2025-12-02T07:03:07.828Z",
       "deliveryAddress": "User address here",
       "status": "processing"
+    },
+    {
+      "id": "25d3",
+      "userId": "0681",
+      "items": [
+        {
+          "id": "2",
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 2,
+          "image": "/cake/cake2.avif",
+          "dbId": "6802"
+        }
+      ],
+      "address": {
+        "fullName": "",
+        "mobile": "",
+        "city": "",
+        "pincode": ""
+      },
+      "totalAmount": 1625,
+      "paymentMethod": "card",
+      "status": "processing",
+      "date": "2025-12-02T09:47:08.233Z"
     }
   ]
 }

@@ -4,114 +4,131 @@ import { toast } from "react-toastify";
 
 function Payment() {
   const navigate = useNavigate();
+
   const [cartItems, setCartItems] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const [loading, setLoading] = useState(false);
+
+  // Payment fields
   const [formData, setFormData] = useState({
     cardNumber: "",
     expiryDate: "",
     cvv: "",
     nameOnCard: "",
-    upiId: ""
+    upiId: "",
   });
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+
+  // Address fields (required for both card & UPI)
+  const [address, setAddress] = useState({
+    fullName: "",
+    mobile: "",
+    house: "",
+    street: "",
+    city: "",
+    pincode: "",
+    state: "",
+  });
+
+  const [addressErrors, setAddressErrors] = useState({});
+
+  // User
   const [user, setUser] = useState(null);
 
+  // Load user & cart
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user"));
-    setUser(userData);
-
-    if (!userData) {
-      navigate("/login");
-      return;
-    }
-
+    const u = JSON.parse(localStorage.getItem("user"));
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    if (!u) return navigate("/login");
     if (cart.length === 0) {
       toast.error("Your cart is empty!");
-      navigate("/cart");
-      return;
+      return navigate("/cart");
     }
 
+    setUser(u);
     setCartItems(cart);
-  }, [navigate]);
+  }, []);
 
-  const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
+  // subtotal
+  const getTotalPrice = () =>
+    cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const getFinalTotal = () => {
-    const subtotal = getTotalPrice();
-    const delivery = 50;
-    const tax = subtotal * 0.05;
-    return subtotal + delivery + tax;
-  };
-
-  const handleInputChange = (e) => {
+  // format input
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    let formattedValue = value;
+    let v = value;
 
     if (name === "cardNumber") {
-      formattedValue = value.replace(/\s/g, "").replace(/(\d{4})/g, "$1 ").trim();
+      v = value.replace(/\s/g, "").replace(/(\d{4})/g, "$1 ").trim();
     }
 
     if (name === "expiryDate") {
-      formattedValue = value.replace(/\D/g, "").replace(/(\d{2})(\d)/, "$1/$2").slice(0, 5);
+      v = value.replace(/\D/g, "").replace(/(\d{2})(\d)/, "$1/$2").slice(0, 5);
     }
 
-    setFormData({ ...formData, [name]: formattedValue });
-
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: "" });
-    }
+    setFormData({ ...formData, [name]: v });
+    setErrors({ ...errors, [name]: "" });
   };
 
-  const validateForm = () => {
-    const newErrors = {};
+  // address change
+  const handleAddressInput = (e) => {
+    const { name, value } = e.target;
+    setAddress({ ...address, [name]: value });
+    setAddressErrors({ ...addressErrors, [name]: "" });
+  };
 
+  // validation
+  const validate = () => {
+    const err = {};
+    const addrErr = {};
+
+    // card validation
     if (paymentMethod === "card") {
-      if (!formData.cardNumber) {
-        newErrors.cardNumber = "Card number is required";
-      } else if (formData.cardNumber.replace(/\s/g, "").length !== 16) {
-        newErrors.cardNumber = "Card number must be 16 digits";
-      }
+      if (!formData.cardNumber) err.cardNumber = "Required";
+      else if (formData.cardNumber.replace(/\s/g, "").length !== 16)
+        err.cardNumber = "Enter valid 16-digit card";
 
-      if (!formData.expiryDate) {
-        newErrors.expiryDate = "Expiry date is required";
-      } else if (!/^\d{2}\/\d{2}$/.test(formData.expiryDate)) {
-        newErrors.expiryDate = "Use MM/YY format";
-      }
-
-      if (!formData.cvv) {
-        newErrors.cvv = "CVV is required";
-      } else if (!/^\d{3,4}$/.test(formData.cvv)) {
-        newErrors.cvv = "CVV must be 3 or 4 digits";
-      }
-
-      if (!formData.nameOnCard.trim()) {
-        newErrors.nameOnCard = "Name on card is required";
-      }
+      if (!formData.expiryDate) err.expiryDate = "Required";
+      if (!formData.cvv) err.cvv = "Required";
+      if (!formData.nameOnCard.trim()) err.nameOnCard = "Required";
     }
 
+    // UPI validation
     if (paymentMethod === "upi") {
-      if (!formData.upiId) {
-        newErrors.upiId = "UPI ID is required";
-      } else if (!/^[\w.-]+@[\w.-]+$/.test(formData.upiId)) {
-        newErrors.upiId = "Invalid UPI ID format";
-      }
+      if (!formData.upiId) err.upiId = "Enter UPI ID";
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // address validation (for both)
+    const required = ["fullName", "mobile", "house", "street", "city", "pincode", "state"];
+
+    required.forEach((field) => {
+      if (!address[field]) addrErr[field] = "Required";
+    });
+
+    if (address.mobile && !/^[6-9]\d{9}$/.test(address.mobile)) {
+      addrErr.mobile = "Invalid mobile";
+    }
+
+    if (address.pincode && !/^\d{6}$/.test(address.pincode)) {
+      addrErr.pincode = "Invalid pincode";
+    }
+
+    setErrors(err);
+    setAddressErrors(addrErr);
+
+    if (Object.keys(err).length > 0) return false;
+    if (Object.keys(addrErr).length > 0) return false;
+
+    return true;
   };
 
   const handlePayment = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      toast.error("Please fix the errors before proceeding");
+    if (!validate()) {
+      toast.error("Fix errors before continuing.");
       return;
     }
 
@@ -121,275 +138,194 @@ function Payment() {
       const order = {
         userId: user.id,
         items: cartItems,
-        totalAmount: getFinalTotal(),
-        paymentMethod: paymentMethod,
+        totalAmount: getTotalPrice(), // No tax, no delivery
+        paymentMethod,
         paymentStatus: "completed",
-        orderDate: new Date().toISOString(),
-        deliveryAddress: "User address here",
-        status: "processing"
+        address,
+        date: new Date().toISOString(),
+        status: "processing",
       };
 
       await fetch("http://localhost:3001/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(order)
+        body: JSON.stringify(order),
       });
 
-      const cartRes = await fetch(`http://localhost:3001/cart?userId=${user.id}`);
-      const serverCart = await cartRes.json();
+      // clear server cart
+      const r = await fetch(`http://localhost:3001/cart?userId=${user.id}`);
+      const serverCart = await r.json();
 
-      for (const item of serverCart) {
-        await fetch(`http://localhost:3001/cart/${item.id}`, {
-          method: "DELETE"
-        });
+      for (const it of serverCart) {
+        await fetch(`http://localhost:3001/cart/${it.id}`, { method: "DELETE" });
       }
 
       localStorage.setItem("cart", JSON.stringify([]));
-      localStorage.setItem("wishlist", JSON.stringify([]));
 
-      window.dispatchEvent(new Event("storage"));
+      toast.success("Order placed successfully!");
 
-      toast.success("Payment successful! Your order has been placed.");
-
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
-    } catch (error) {
-      toast.error("Payment failed. Please try again.");
-    } finally {
-      setLoading(false);
+      setTimeout(() => navigate("/"), 1500);
+    } catch (err) {
+      toast.error("Payment failed!");
     }
+
+    setLoading(false);
   };
 
-  if (cartItems.length === 0) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-amber-600 text-xl">Loading...</div>
-      </div>
-    );
-  }
+  if (cartItems.length === 0)
+    return <div className="p-10 text-center text-xl">Loading...</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      <div className="container mx-auto max-w-6xl">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Payment</h1>
+      <div className="max-w-5xl mx-auto">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Payment Method</h2>
+        <h1 className="text-3xl font-bold mb-6">Payment</h1>
 
-            <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          {/* Left */}
+          <div className="bg-white p-6 rounded-xl shadow">
+
+            <h2 className="text-xl font-bold mb-4">Select Payment Method</h2>
+
+            <div className="flex gap-3 mb-6">
               {[
                 { id: "card", label: "Card", icon: "💳" },
                 { id: "upi", label: "UPI", icon: "📱" },
-                { id: "cod", label: "COD", icon: "💰" }
               ].map((m) => (
                 <button
                   key={m.id}
-                  type="button"
-                  onClick={() => setPaymentMethod(m.id)}
-                  className={`py-4 rounded-lg border-2 transition-all ${
+                  className={`flex-1 py-3 rounded-lg border ${
                     paymentMethod === m.id
                       ? "border-amber-500 bg-amber-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      : "border-gray-300"
                   }`}
+                  onClick={() => setPaymentMethod(m.id)}
                 >
-                  <div className="text-2xl mb-2">{m.icon}</div>
-                  <div className="text-sm font-medium">{m.label}</div>
+                  <div className="text-2xl">{m.icon}</div>
+                  <p>{m.label}</p>
                 </button>
               ))}
             </div>
 
-            {/* Payment Form */}
             <form onSubmit={handlePayment}>
+
+              {/* Card Payment */}
               {paymentMethod === "card" && (
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-gray-700 mb-2">Card Number</label>
-                    <input
-                      type="text"
-                      name="cardNumber"
-                      value={formData.cardNumber}
-                      onChange={handleInputChange}
-                      maxLength={19}
-                      className={`w-full px-4 py-3 border rounded-lg ${
-                        errors.cardNumber
-                          ? "border-red-500"
-                          : "border-gray-300 focus:ring-amber-500"
-                      }`}
-                      placeholder="1234 5678 9012 3456"
-                    />
-                    {errors.cardNumber && (
-                      <p className="text-red-500 text-sm">{errors.cardNumber}</p>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-gray-700 mb-2">Expiry Date</label>
-                      <input
-                        type="text"
-                        name="expiryDate"
-                        value={formData.expiryDate}
-                        onChange={handleInputChange}
-                        maxLength={5}
-                        className={`w-full px-4 py-3 border rounded-lg ${
-                          errors.expiryDate
-                            ? "border-red-500"
-                            : "border-gray-300 focus:ring-amber-500"
-                        }`}
-                        placeholder="MM/YY"
-                      />
-                      {errors.expiryDate && (
-                        <p className="text-red-500 text-sm">{errors.expiryDate}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-gray-700 mb-2">CVV</label>
-                      <input
-                        type="text"
-                        name="cvv"
-                        value={formData.cvv}
-                        onChange={handleInputChange}
-                        maxLength={4}
-                        className={`w-full px-4 py-3 border rounded-lg ${
-                          errors.cvv
-                            ? "border-red-500"
-                            : "border-gray-300 focus:ring-amber-500"
-                        }`}
-                        placeholder="123"
-                      />
-                      {errors.cvv && (
-                        <p className="text-red-500 text-sm">{errors.cvv}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-2">Name on Card</label>
-                    <input
-                      type="text"
-                      name="nameOnCard"
-                      value={formData.nameOnCard}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg ${
-                        errors.nameOnCard
-                          ? "border-red-500"
-                          : "border-gray-300 focus:ring-amber-500"
-                      }`}
-                      placeholder="John Doe"
-                    />
-                    {errors.nameOnCard && (
-                      <p className="text-red-500 text-sm">{errors.nameOnCard}</p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {paymentMethod === "upi" && (
-                <div>
-                  <label className="block text-gray-700 mb-2">UPI ID</label>
                   <input
                     type="text"
-                    name="upiId"
-                    value={formData.upiId}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg ${
-                      errors.upiId
-                        ? "border-red-500"
-                        : "border-gray-300 focus:ring-amber-500"
-                    }`}
-                    placeholder="yourname@upi"
+                    name="cardNumber"
+                    placeholder="Card Number"
+                    maxLength="19"
+                    value={formData.cardNumber}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border rounded"
                   />
-                  {errors.upiId && (
-                    <p className="text-red-500 text-sm">{errors.upiId}</p>
-                  )}
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      name="expiryDate"
+                      placeholder="MM/YY"
+                      maxLength="5"
+                      value={formData.expiryDate}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border rounded"
+                    />
+
+                    <input
+                      type="text"
+                      name="cvv"
+                      placeholder="CVV"
+                      maxLength="4"
+                      value={formData.cvv}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border rounded"
+                    />
+                  </div>
+
+                  <input
+                    type="text"
+                    name="nameOnCard"
+                    placeholder="Name on Card"
+                    value={formData.nameOnCard}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border rounded"
+                  />
                 </div>
               )}
 
-              {paymentMethod === "cod" && (
-                <div className="text-center py-8">
-                  <div className="text-6xl mb-4">💰</div>
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    Cash on Delivery
-                  </h3>
-                  <p className="text-gray-600">
-                    Pay when you receive your order
-                  </p>
-                </div>
+              {/* UPI */}
+              {paymentMethod === "upi" && (
+                <input
+                  type="text"
+                  name="upiId"
+                  placeholder="yourname@upi"
+                  value={formData.upiId}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border rounded mb-4"
+                />
               )}
+
+              {/* Delivery Address for BOTH */}
+              <h2 className="text-lg font-bold mt-6 mb-2">Delivery Address</h2>
+
+              {[
+                { placeholder: "Full Name", name: "fullName" },
+                { placeholder: "Mobile Number", name: "mobile" },
+                { placeholder: "House / Building", name: "house" },
+                { placeholder: "Street / Area", name: "street" },
+                { placeholder: "City", name: "city" },
+                { placeholder: "Pincode", name: "pincode" },
+                { placeholder: "State", name: "state" },
+              ].map((f) => (
+                <input
+                  key={f.name}
+                  type="text"
+                  name={f.name}
+                  placeholder={f.placeholder}
+                  value={address[f.name]}
+                  onChange={handleAddressInput}
+                  className="w-full px-4 py-2 border rounded mb-3"
+                />
+              ))}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-amber-600 hover:bg-amber-700 disabled:bg-amber-400 text-white py-3 rounded-lg font-semibold text-lg mt-6"
+                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg mt-4"
               >
-                {loading
-                  ? "Processing..."
-                  : `Pay ₹${getFinalTotal().toFixed(2)}`}
+                {loading ? "Processing..." : `Pay ₹${getTotalPrice()}`}
               </button>
             </form>
           </div>
 
-          {/* Order Summary */}
-          <div className="bg-white rounded-xl shadow-md p-6 h-fit sticky top-4">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              Order Summary
-            </h2>
+          {/* Right */}
+          <div className="bg-white p-6 rounded-xl shadow h-fit">
+            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 
-            <div className="space-y-4 mb-6">
-              {cartItems.map((item, index) => (
-                <div key={index} className="flex justify-between items-center">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded"
-                    />
-                    <div>
-                      <p className="font-semibold text-gray-800">{item.name}</p>
-                      <p className="text-gray-500 text-sm">
-                        Qty: {item.quantity}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-amber-600 font-semibold">
-                    ₹{(item.price * item.quantity).toFixed(2)}
-                  </p>
+            {cartItems.map((item) => (
+              <div key={item.id} className="flex justify-between mb-3">
+                <div>
+                  <p className="font-semibold">{item.name}</p>
+                  <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                 </div>
-              ))}
-            </div>
-
-            <div className="border-t border-gray-200 pt-4 space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal:</span>
-                <span className="font-semibold">
-                  ₹{getTotalPrice().toFixed(2)}
-                </span>
+                <p>₹{(item.price * item.quantity).toFixed(2)}</p>
               </div>
+            ))}
 
-              <div className="flex justify-between">
-                <span className="text-gray-600">Delivery:</span>
-                <span className="font-semibold">₹50.00</span>
-              </div>
+            <hr className="my-4" />
 
-              <div className="flex justify-between">
-                <span className="text-gray-600">Tax (5%):</span>
-                <span className="font-semibold">
-                  ₹{(getTotalPrice() * 0.05).toFixed(2)}
-                </span>
-              </div>
-
-              <div className="flex justify-between text-lg font-bold pt-3 border-t border-gray-200">
-                <span className="text-gray-800">Total:</span>
-                <span className="text-amber-600">
-                  ₹{getFinalTotal().toFixed(2)}
-                </span>
-              </div>
-            </div>
+            <p className="flex justify-between text-lg font-bold">
+              Total:
+              <span className="text-amber-600">
+                ₹{getTotalPrice().toFixed(2)}
+              </span>
+            </p>
           </div>
         </div>
+
       </div>
     </div>
   );
