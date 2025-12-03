@@ -15,7 +15,7 @@ function Footer() {
 
           {/* Social Icons */}
           <div className="flex gap-4 mt-4 text-xl">
-            <FaFacebook className="hover:text-white cursor-pointer" />
+            <FaFacebook className="hover:text-white cursor-pointer"/>
             <FaInstagram className="hover:text-white cursor-pointer" />
             <FaTwitter className="hover:text-white cursor-pointer" />
           </div>
@@ -46,9 +46,9 @@ function Footer() {
         {/* Contact */}
         <div>
           <h3 className="text-lg font-semibold text-white mb-3">Contact Us</h3>
-          <p className="text-gray-400">📍 Kochi, Kerala</p>
-          <p className="text-gray-400">📞 +91 98765 43210</p>
-          <p className="text-gray-400">📧 support@sweetmart.com</p>
+          <p className="text-gray-400"> Malappuram, Kerala</p>
+          <p className="text-gray-400"> +91 98765 43210</p>
+          <p className="text-gray-400">support@sweetmart.com</p>
         </div>
       </div>
 

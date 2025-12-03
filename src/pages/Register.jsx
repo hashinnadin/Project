@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -14,7 +13,7 @@ function Register() {
   });
 
   const [errors, setErrors] = useState({});
-
+  
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -129,11 +128,9 @@ function Register() {
         {errors.confirmPassword && (
           <p className="text-red-400 text-sm">{errors.confirmPassword}</p>
         )}
-
         <button className="w-full bg-blue-600 mt-6 p-3 rounded-lg text-white hover:bg-blue-700">
           Register
         </button>
-
         <p className="text-gray-300 text-sm mt-4 text-center">
           Already have an account?{" "}
           <span
@@ -147,7 +144,4 @@ function Register() {
     </div>
   );
 }
-
 export default Register;
-
-

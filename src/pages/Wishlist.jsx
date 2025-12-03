@@ -90,7 +90,6 @@ function Wishlist() {
 
     localStorage.setItem("cart", JSON.stringify(oldCart));
 
-    // Server side check
     try {
       const check = await fetch(
         `http://localhost:3001/cart?userId=${user.id}&productId=${item.id}`
@@ -131,7 +130,6 @@ function Wishlist() {
       await addToCart(item);
     }
 
-    // Clear wishlist
     setWishlistItems([]);
     localStorage.setItem("wishlist", "[]");
 

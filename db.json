@@ -9,7 +9,7 @@
   ],
   "products": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Straw Velvet Cake",
       "price": 800,
       "category": "Premium",
@@ -18,7 +18,7 @@
       "rating": 4.8
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Choco Cream Cake",
       "price": 750,
       "category": "Classic",
@@ -27,7 +27,7 @@
       "rating": 4.5
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Black Forest Cake",
       "price": 900,
       "category": "Premium",
@@ -36,7 +36,7 @@
       "rating": 4.9
     },
     {
-      "id": "4",
+      "id": 4,
       "name": "Party Mix Cake",
       "price": 900,
       "category": "Party",
@@ -45,7 +45,7 @@
       "rating": 4.7
     },
     {
-      "id": "5",
+      "id": 5,
       "name": "Creamy Delight",
       "price": 500,
       "category": "Classic",
@@ -54,7 +54,7 @@
       "rating": 4.3
     },
     {
-      "id": "6",
+      "id": 6,
       "name": "Special Chocolate Cake",
       "price": 650,
       "category": "Premium",
@@ -63,7 +63,7 @@
       "rating": 4.6
     },
     {
-      "id": "7",
+      "id": 7,
       "name": "Strawberry Delight Cake",
       "price": 780,
       "category": "Fruit",
@@ -72,7 +72,7 @@
       "rating": 4.4
     },
     {
-      "id": "8",
+      "id": 8,
       "name": "Plum Cake",
       "price": 800,
       "category": "Seasonal",
@@ -81,7 +81,7 @@
       "rating": 4.6
     },
     {
-      "id": "9",
+      "id": 9,
       "name": "Butterscotch Milk Chocolate Cake",
       "price": 850,
       "category": "Special",
@@ -90,7 +90,7 @@
       "rating": 4.7
     },
     {
-      "id": "10",
+      "id": 10,
       "name": "Chocolate Strawberry Bento Cake",
       "price": 950,
       "category": "Premium",
@@ -99,7 +99,7 @@
       "rating": 4.8
     },
     {
-      "id": "11",
+      "id": 11,
       "name": "Dark Chocolate Mousse Cake",
       "price": 1000,
       "category": "Premium",
@@ -108,7 +108,7 @@
       "rating": 4.9
     },
     {
-      "id": "12",
+      "id": 12,
       "name": "Dutch Truffle Cake Half KG",
       "price": 800,
       "category": "Premium",
@@ -117,7 +117,7 @@
       "rating": 4.7
     },
     {
-      "id": "13",
+      "id": 13,
       "name": "Eggless Dutch Truffle Cake Half KG",
       "price": 780,
       "category": "Eggless",
@@ -126,7 +126,7 @@
       "rating": 4.6
     },
     {
-      "id": "14",
+      "id": 14,
       "name": "Eggless Dutch Truffle Cake 1 KG",
       "price": 1200,
       "category": "Eggless",
@@ -135,7 +135,7 @@
       "rating": 4.8
     },
     {
-      "id": "15",
+      "id": 15,
       "name": "Fresh Fruit Cream Cake",
       "price": 850,
       "category": "Fruit",
@@ -144,7 +144,7 @@
       "rating": 4.7
     },
     {
-      "id": "16",
+      "id": 16,
       "name": "Blueberry Cheesecake",
       "price": 900,
       "category": "Cheesecake",
@@ -153,7 +153,7 @@
       "rating": 4.8
     },
     {
-      "id": "17",
+      "id": 17,
       "name": "New York Cheesecake",
       "price": 950,
       "category": "Cheesecake",
@@ -162,7 +162,7 @@
       "rating": 4.9
     },
     {
-      "id": "18",
+      "id": 18,
       "name": "Red Velvet Cake",
       "price": 850,
       "category": "Premium",
@@ -171,7 +171,7 @@
       "rating": 4.8
     },
     {
-      "id": "19",
+      "id": 19,
       "name": "Strawberry Custard Cake",
       "price": 750,
       "category": "Fruit",
@@ -230,34 +230,30 @@
       "quantity": 1,
       "image": "/cake/cake1.avif",
       "date": "2025-12-02T13:09:33.253Z"
+    },
+    {
+      "id": "9f2b",
+      "userId": "8270",
+      "productId": 2,
+      "productName": "Choco Cream Cake",
+      "price": 750,
+      "image": "/cake/cake2.avif",
+      "quantity": 1,
+      "date": "2025-12-03T04:19:30.706Z"
     }
   ],
-  "wishlist": [],
-  "orders": [
+  "wishlist": [
     {
-      "id": "25d3",
-      "userId": "0681",
-      "items": [
-        {
-          "id": "2",
-          "name": "Choco Cream Cake",
-          "price": 750,
-          "quantity": 2,
-          "image": "/cake/cake2.avif",
-          "dbId": "6802"
-        }
-      ],
-      "address": {
-        "fullName": "",
-        "mobile": "",
-        "city": "",
-        "pincode": ""
-      },
-      "totalAmount": 1625,
-      "paymentMethod": "card",
-      "status": "processing",
-      "date": "2025-12-02T09:47:08.233Z"
-    },
+      "id": "938d",
+      "userId": "8270",
+      "productId": "2",
+      "productName": "Choco Cream Cake",
+      "price": 750,
+      "image": "/cake/cake2.avif",
+      "date": "2025-12-02T15:46:20.336Z"
+    }
+  ],
+  "orders": [
     {
       "id": "089a",
       "userId": "8270",
@@ -285,6 +281,34 @@
       },
       "date": "2025-12-02T13:17:59.972Z",
       "status": "processing"
+    },
+    {
+      "id": "d468",
+      "userId": "8270",
+      "items": [
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 3,
+          "image": "/cake/cake2.avif",
+          "dbId": "3ae2"
+        }
+      ],
+      "totalAmount": 2250,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "9745118404",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-03T04:05:35.289Z",
+      "status": "Success"
     }
   ]
 }

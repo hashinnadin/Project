@@ -23,8 +23,9 @@ function Cart() {
       );
       const data = await response.json();
 
+      // Convert productId (string) -> number
       const formatted = data.map((item) => ({
-        id: item.productId,
+        id: Number(item.productId),
         name: item.productName,
         price: item.price,
         quantity: item.quantity,
@@ -45,13 +46,13 @@ function Cart() {
     if (qty < 1) return;
 
     const updated = cartItems.map((item) =>
-      item.id === productId ? { ...item, quantity: qty } : item
+      item.id == productId ? { ...item, quantity: qty } : item
     );
 
     setCartItems(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
 
-    const item = updated.find((i) => i.id === productId);
+    const item = updated.find((i) => i.id == productId);
 
     try {
       await fetch(`http://localhost:3001/cart/${item.dbId}`, {
@@ -60,7 +61,6 @@ function Cart() {
         body: JSON.stringify({ quantity: qty }),
       });
 
-      window.dispatchEvent(new Event("storage"));
       toast.success("Updated!");
     } catch {
       toast.error("Server update failed!");
@@ -68,7 +68,7 @@ function Cart() {
   };
 
   const removeItem = async (productId) => {
-    const item = cartItems.find((i) => i.id === productId);
+    const item = cartItems.find((i) => i.id == productId);
 
     try {
       await fetch(`http://localhost:3001/cart/${item.dbId}`, {
@@ -78,10 +78,10 @@ function Cart() {
       toast.error("Failed to delete from server!");
     }
 
-    const updated = cartItems.filter((i) => i.id !== productId);
+    const updated = cartItems.filter((i) => i.id != productId);
     setCartItems(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
-    window.dispatchEvent(new Event("storage"));
+
     toast.success("Item removed!");
   };
 
@@ -90,7 +90,6 @@ function Cart() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {
@@ -191,7 +190,6 @@ function Cart() {
             ))}
           </div>
 
-          {/* Summary */}
           <div className="bg-white rounded-xl shadow-md p-6 sticky top-6 h-fit">
             <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
 
@@ -200,7 +198,6 @@ function Cart() {
                 <span>Subtotal</span>
                 <span>₹{subtotal.toFixed(2)}</span>
               </div>
-
 
               <div className="border-t pt-3 flex justify-between font-bold text-xl">
                 <span>Total</span>

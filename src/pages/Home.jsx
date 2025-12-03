@@ -25,27 +25,56 @@ function Home() {
     fetchProducts();
   }, []);
 
-  const addToCart = (item) => {
+  // ----------------------------
+  // ✅ FIXED ADD TO CART (SERVER SYNC)
+  // ----------------------------
+  const addToCart = async (item) => {
     const user = JSON.parse(localStorage.getItem("user"));
+
     if (!user) {
       toast.error("Please login to add items to cart");
       navigate("/login");
       return;
     }
 
-    const oldCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingItem = oldCart.find((c) => c.id === item.id);
+    try {
+      // Check existing item in server cart
+      const res = await axios.get(
+        `http://localhost:3001/cart?userId=${user.id}&productId=${item.id}`
+      );
 
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      oldCart.push({ ...item, quantity: 1 });
+      if (res.data.length > 0) {
+        const existing = res.data[0];
+
+        // Update quantity
+        await axios.patch(`http://localhost:3001/cart/${existing.id}`, {
+          quantity: existing.quantity + 1,
+        });
+
+        toast.success("Quantity updated in cart!");
+      } else {
+        // Add new item to cart
+        await axios.post("http://localhost:3001/cart", {
+          userId: user.id,
+          productId: item.id,
+          productName: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: 1,
+          date: new Date(),
+        });
+
+        toast.success(`${item.name} added to cart`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add to cart!");
     }
-
-    localStorage.setItem("cart", JSON.stringify(oldCart));
-    toast.success(`${item.name} added to cart`);
   };
 
+  // ----------------------------
+  // WISHLIST (LOCAL STORAGE)
+  // ----------------------------
   const addToWishlist = (item) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -77,30 +106,30 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      
-      {/* Cake Notes / Hero Banner */}
-<div 
-  className="w-full h-[280px] md:h-[350px] bg-gradient-to-r from-amber-500 to-orange-600 
-  flex items-center justify-center text-center px-6 animate__animated animate__fadeIn"
->
-  <div>
-    <h1 className="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg">
-      Freshly Baked Happiness, Just for You! 🎂
-    </h1>
 
-    <p className="text-white text-lg md:text-xl mt-4 opacity-90">
-      Handcrafted cakes made with love, quality ingredients, and a touch of magic ✨
-    </p>
+      {/* Banner */}
+      <div 
+        className="w-full h-[280px] md:h-[350px] bg-gradient-to-r from-amber-500 to-orange-600 
+        flex items-center justify-center text-center px-6 animate__animated animate__fadeIn"
+      >
+        <div>
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg">
+            Freshly Baked Happiness, Just for You! 🎂
+          </h1>
 
-    <button
-      onClick={() => navigate('/products')}
-      className="mt-6 bg-white text-amber-700 font-semibold px-6 py-3 rounded-lg shadow-lg 
-      hover:bg-amber-100 transition-all duration-300"
-    >
-      Explore All Cakes →
-    </button>
-  </div>
-</div>
+          <p className="text-white text-lg md:text-xl mt-4 opacity-90">
+            Handcrafted cakes made with love, quality ingredients, and a touch of magic ✨
+          </p>
+
+          <button
+            onClick={() => navigate('/products')}
+            className="mt-6 bg-white text-amber-700 font-semibold px-6 py-3 rounded-lg shadow-lg 
+            hover:bg-amber-100 transition-all duration-300"
+          >
+            Explore All Cakes →
+          </button>
+        </div>
+      </div>
 
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-6">
@@ -110,9 +139,8 @@ function Home() {
             <p className="text-gray-600 text-lg">
               Our best-selling handcrafted cakes, just for you
             </p>
-
-          
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((cake) => (
               <div
@@ -124,15 +152,14 @@ function Home() {
                   alt={cake.name}
                   className="w-full h-56 object-cover"
                 />
+
                 <div className="p-4">
                   <h3 className="text-xl font-semibold">{cake.name}</h3>
                   <p className="text-gray-500 text-sm mt-1">{cake.category}</p>
-
                   <p className="text-lg font-bold mt-3">₹{cake.price}</p>
 
-                  <p className="text-gray-600 text-sm mt-2">
-                    {cake.description}
-                  </p>
+                  <p className="text-gray-600 text-sm mt-2">{cake.description}</p>
+
                   <div className="flex gap-2 mt-4">
                     <button
                       onClick={() => addToCart(cake)}
@@ -149,6 +176,7 @@ function Home() {
                     </button>
                   </div>
                 </div>
+
               </div>
             ))}
           </div>
