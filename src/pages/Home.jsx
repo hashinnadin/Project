@@ -25,9 +25,6 @@ function Home() {
     fetchProducts();
   }, []);
 
-  // ----------------------------
-  // ✅ FIXED ADD TO CART (SERVER SYNC)
-  // ----------------------------
   const addToCart = async (item) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -38,7 +35,6 @@ function Home() {
     }
 
     try {
-      // Check existing item in server cart
       const res = await axios.get(
         `http://localhost:3001/cart?userId=${user.id}&productId=${item.id}`
       );
@@ -46,14 +42,12 @@ function Home() {
       if (res.data.length > 0) {
         const existing = res.data[0];
 
-        // Update quantity
         await axios.patch(`http://localhost:3001/cart/${existing.id}`, {
           quantity: existing.quantity + 1,
         });
 
         toast.success("Quantity updated in cart!");
       } else {
-        // Add new item to cart
         await axios.post("http://localhost:3001/cart", {
           userId: user.id,
           productId: item.id,
@@ -72,9 +66,7 @@ function Home() {
     }
   };
 
-  // ----------------------------
-  // WISHLIST (LOCAL STORAGE)
-  // ----------------------------
+  
   const addToWishlist = (item) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -107,7 +99,6 @@ function Home() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
 
-      {/* Banner */}
       <div 
         className="w-full h-[280px] md:h-[350px] bg-gradient-to-r from-amber-500 to-orange-600 
         flex items-center justify-center text-center px-6 animate__animated animate__fadeIn"
