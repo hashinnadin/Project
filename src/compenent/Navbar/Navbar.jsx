@@ -77,9 +77,7 @@ function Navbar() {
 
   return (
     <nav className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-      {/* <div className="bg-amber-600 text-white py-2 text-center text-sm">
-        🚚 Free delivery above ₹999 | 🎁 Special discounts for new customers
-      </div> */}
+     
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           <div
@@ -91,20 +89,7 @@ function Navbar() {
               BakeHub
             </span>
           </div>
-          {/* <div className="hidden md:flex flex-1 max-w-md mx-4">
-            <form onSubmit={handleSearch} className="relative w-full">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search cakes..."
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
-              />
-              <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2">
-                <FaSearch className="text-gray-500" />
-              </button>
-            </form>
-          </div> */}
+      
           <ul className="hidden lg:flex items-center gap-8 text-gray-700 text-lg">
             <li
               className={`cursor-pointer hover:text-amber-600 ${
