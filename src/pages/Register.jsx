@@ -13,7 +13,7 @@ function Register() {
   });
 
   const [errors, setErrors] = useState({});
-  
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -54,14 +54,14 @@ function Register() {
     if (Object.keys(validationErrors).length !== 0) return;
 
     try {const userCheck = await axios.get(
-        `http://localhost:3001/users?email=${form.email}`
+        `http://localhost:3002/users?email=${form.email}`
       );
-
+      
       if (userCheck.data.length > 0) {
         toast.error("Email already registered!");
         return;
       }
-      await axios.post("http://localhost:3001/users", {
+      await axios.post("http://localhost:3002/users", {
         username: form.username,
         email: form.email,
         password: form.password,

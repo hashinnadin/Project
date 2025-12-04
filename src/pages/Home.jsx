@@ -13,7 +13,7 @@ function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/products?_limit=6");
+        const res = await axios.get("http://localhost:3002/products?_limit=6");
         setProducts(res.data);
         setLoading(false);
       } catch (error) {
@@ -36,19 +36,19 @@ function Home() {
 
     try {
       const res = await axios.get(
-        `http://localhost:3001/cart?userId=${user.id}&productId=${item.id}`
+        `http://localhost:3002/cart?userId=${user.id}&productId=${item.id}`
       );
 
       if (res.data.length > 0) {
         const existing = res.data[0];
 
-        await axios.patch(`http://localhost:3001/cart/${existing.id}`, {
+        await axios.patch(`http://localhost:3002/cart/${existing.id}`, {
           quantity: existing.quantity + 1,
         });
 
         toast.success("Quantity updated in cart!");
       } else {
-        await axios.post("http://localhost:3001/cart", {
+        await axios.post("http://localhost:3002/cart", {
           userId: user.id,
           productId: item.id,
           productName: item.name,
@@ -66,7 +66,6 @@ function Home() {
     }
   };
 
-  
   const addToWishlist = (item) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -95,7 +94,6 @@ function Home() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-white text-gray-900">
 
@@ -142,6 +140,7 @@ function Home() {
                   src={cake.image}
                   alt={cake.name}
                   className="w-full h-56 object-cover"
+                  
                 />
 
                 <div className="p-4">
@@ -167,7 +166,6 @@ function Home() {
                     </button>
                   </div>
                 </div>
-
               </div>
             ))}
           </div>

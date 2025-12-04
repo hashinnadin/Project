@@ -1,15 +1,45 @@
 {
   "users": [
     {
-      "id": "8270",
+      "id": "1",
       "username": "Hashin",
       "email": "hashinnadin@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "d63c",
+      "username": "shanu",
+      "email": "h@gmal.com",
+      "password": "12345"
+    },
+    {
+      "id": "76ec",
+      "username": "hashin",
+      "email": "fasalsabah07@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "3087",
+      "username": "hashin",
+      "email": "hashinnadin2@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "489b",
+      "username": "hashin",
+      "email": "hashinnadin4@gmail.com",
+      "password": "123456"
+    },
+    {
+      "id": "ee10",
+      "username": "12343",
+      "email": "hashinnatdin@gmail.com",
       "password": "1234"
     }
   ],
   "products": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Straw Velvet Cake",
       "price": 800,
       "category": "Premium",
@@ -18,7 +48,7 @@
       "rating": 4.8
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Choco Cream Cake",
       "price": 750,
       "category": "Classic",
@@ -27,7 +57,7 @@
       "rating": 4.5
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Black Forest Cake",
       "price": 900,
       "category": "Premium",
@@ -36,7 +66,7 @@
       "rating": 4.9
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Party Mix Cake",
       "price": 900,
       "category": "Party",
@@ -45,7 +75,7 @@
       "rating": 4.7
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Creamy Delight",
       "price": 500,
       "category": "Classic",
@@ -54,7 +84,7 @@
       "rating": 4.3
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Special Chocolate Cake",
       "price": 650,
       "category": "Premium",
@@ -63,7 +93,7 @@
       "rating": 4.6
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Strawberry Delight Cake",
       "price": 780,
       "category": "Fruit",
@@ -72,7 +102,7 @@
       "rating": 4.4
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Plum Cake",
       "price": 800,
       "category": "Seasonal",
@@ -81,7 +111,7 @@
       "rating": 4.6
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "Butterscotch Milk Chocolate Cake",
       "price": 850,
       "category": "Special",
@@ -90,7 +120,7 @@
       "rating": 4.7
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Chocolate Strawberry Bento Cake",
       "price": 950,
       "category": "Premium",
@@ -99,7 +129,7 @@
       "rating": 4.8
     },
     {
-      "id": 11,
+      "id": "11",
       "name": "Dark Chocolate Mousse Cake",
       "price": 1000,
       "category": "Premium",
@@ -108,7 +138,7 @@
       "rating": 4.9
     },
     {
-      "id": 12,
+      "id": "12",
       "name": "Dutch Truffle Cake Half KG",
       "price": 800,
       "category": "Premium",
@@ -117,7 +147,7 @@
       "rating": 4.7
     },
     {
-      "id": 13,
+      "id": "13",
       "name": "Eggless Dutch Truffle Cake Half KG",
       "price": 780,
       "category": "Eggless",
@@ -126,7 +156,7 @@
       "rating": 4.6
     },
     {
-      "id": 14,
+      "id": "14",
       "name": "Eggless Dutch Truffle Cake 1 KG",
       "price": 1200,
       "category": "Eggless",
@@ -135,7 +165,7 @@
       "rating": 4.8
     },
     {
-      "id": 15,
+      "id": "15",
       "name": "Fresh Fruit Cream Cake",
       "price": 850,
       "category": "Fruit",
@@ -144,7 +174,7 @@
       "rating": 4.7
     },
     {
-      "id": 16,
+      "id": "16",
       "name": "Blueberry Cheesecake",
       "price": 900,
       "category": "Cheesecake",
@@ -153,7 +183,7 @@
       "rating": 4.8
     },
     {
-      "id": 17,
+      "id": "17",
       "name": "New York Cheesecake",
       "price": 950,
       "category": "Cheesecake",
@@ -162,7 +192,7 @@
       "rating": 4.9
     },
     {
-      "id": 18,
+      "id": "18",
       "name": "Red Velvet Cake",
       "price": 850,
       "category": "Premium",
@@ -171,7 +201,7 @@
       "rating": 4.8
     },
     {
-      "id": 19,
+      "id": "19",
       "name": "Strawberry Custard Cake",
       "price": 750,
       "category": "Fruit",
@@ -182,92 +212,69 @@
   ],
   "cart": [
     {
-      "id": "a15d",
-      "userId": "0681",
-      "productId": "1",
-      "productName": "Straw Velvet Cake",
-      "price": 800,
+      "id": "ceec",
+      "userId": "8270",
+      "productId": 3,
+      "productName": "Black Forest Cake",
+      "price": 900,
       "quantity": 1,
-      "image": "/cake/cake1.avif",
-      "date": "2025-12-02T10:50:27.312Z"
+      "image": "/cake/cake3.avif",
+      "date": "2025-12-03T07:52:28.599Z"
     },
     {
-      "id": "d7f9",
-      "userId": "0681",
-      "productId": "1",
-      "productName": "Straw Velvet Cake",
-      "price": 800,
-      "quantity": 1,
-      "image": "/cake/cake1.avif",
-      "date": "2025-12-02T10:55:07.229Z"
-    },
-    {
-      "id": "e56e",
-      "userId": "0681",
+      "id": "9eff",
+      "userId": "1",
       "productId": "4",
       "productName": "Party Mix Cake",
       "price": 900,
-      "quantity": 1,
       "image": "/cake/cake4.avif",
-      "date": "2025-12-02T10:55:13.204Z"
-    },
-    {
-      "id": "f5bb",
-      "userId": "fea6",
-      "productId": "2",
-      "productName": "Choco Cream Cake",
-      "price": 750,
       "quantity": 1,
-      "image": "/cake/cake2.avif",
-      "date": "2025-12-02T12:20:45.079Z"
+      "date": "2025-12-04T06:36:01.961Z"
+    }
+  ],
+  "wishlist": [
+    {
+      "id": "3863",
+      "userId": "8270",
+      "productId": 3,
+      "productName": "Black Forest Cake",
+      "price": 900,
+      "image": "/cake/cake3.avif",
+      "date": "2025-12-03T07:52:03.366Z"
     },
     {
-      "id": "21aa",
-      "userId": "fea6",
-      "productId": "1",
-      "productName": "Straw Velvet Cake",
-      "price": 800,
-      "quantity": 1,
-      "image": "/cake/cake1.avif",
-      "date": "2025-12-02T13:09:33.253Z"
-    },
-    {
-      "id": "9f2b",
+      "id": "fc65",
       "userId": "8270",
       "productId": 2,
       "productName": "Choco Cream Cake",
       "price": 750,
       "image": "/cake/cake2.avif",
-      "quantity": 1,
-      "date": "2025-12-03T04:19:30.706Z"
-    }
-  ],
-  "wishlist": [
-    {
-      "id": "938d",
-      "userId": "8270",
-      "productId": "2",
-      "productName": "Choco Cream Cake",
-      "price": 750,
-      "image": "/cake/cake2.avif",
-      "date": "2025-12-02T15:46:20.336Z"
+      "date": "2025-12-03T07:55:20.326Z"
     }
   ],
   "orders": [
     {
-      "id": "089a",
-      "userId": "8270",
+      "id": "52a3",
+      "userId": "3087",
       "items": [
         {
-          "id": "1",
+          "id": 1,
           "name": "Straw Velvet Cake",
           "price": 800,
           "quantity": 1,
           "image": "/cake/cake1.avif",
-          "dbId": "7053"
+          "dbId": "edc2"
+        },
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 1,
+          "image": "/cake/cake2.avif",
+          "dbId": "b67b"
         }
       ],
-      "totalAmount": 800,
+      "totalAmount": 1550,
       "paymentMethod": "upi",
       "paymentStatus": "completed",
       "address": {
@@ -279,12 +286,12 @@
         "pincode": "676305",
         "state": "kerala"
       },
-      "date": "2025-12-02T13:17:59.972Z",
-      "status": "processing"
+      "date": "2025-12-03T12:53:03.794Z",
+      "status": "Success"
     },
     {
-      "id": "d468",
-      "userId": "8270",
+      "id": "7883",
+      "userId": "1",
       "items": [
         {
           "id": 2,
@@ -292,7 +299,7 @@
           "price": 750,
           "quantity": 3,
           "image": "/cake/cake2.avif",
-          "dbId": "3ae2"
+          "dbId": "6204"
         }
       ],
       "totalAmount": 2250,
@@ -307,7 +314,35 @@
         "pincode": "676305",
         "state": "kerala"
       },
-      "date": "2025-12-03T04:05:35.289Z",
+      "date": "2025-12-04T06:32:05.219Z",
+      "status": "Success"
+    },
+    {
+      "id": "83db",
+      "userId": "1",
+      "items": [
+        {
+          "id": 4,
+          "name": "Party Mix Cake",
+          "price": 900,
+          "quantity": 1,
+          "image": "/cake/cake4.avif",
+          "dbId": "d3b6"
+        }
+      ],
+      "totalAmount": 900,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "9745118404",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-04T06:35:54.627Z",
       "status": "Success"
     }
   ]

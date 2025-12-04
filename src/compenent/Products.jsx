@@ -14,6 +14,9 @@ function Product() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // -----------------------------------------
+  // Load products + read search query
+  // -----------------------------------------
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const searchQuery = params.get("search") || "";
@@ -21,10 +24,10 @@ function Product() {
 
     fetchProducts(searchQuery);
   }, [location.search]);
-  
+
   const fetchProducts = async (searchQuery) => {
     try {
-      const response = await fetch("http://localhost:3001/products");
+      const response = await fetch("http://localhost:3002/products");
       const data = await response.json();
 
       setProducts(data);
@@ -36,6 +39,9 @@ function Product() {
     }
   };
 
+  // -----------------------------------------
+  // SEARCH FILTER
+  // -----------------------------------------
   const filterProducts = (list, term) => {
     if (!term.trim()) {
       setFilteredProducts(list);
@@ -57,6 +63,9 @@ function Product() {
     filterProducts(products, value);
   };
 
+  // -----------------------------------------
+  // ADD TO CART (SERVER + LOCAL) FIXED ✔
+  // -----------------------------------------
   const addToCart = async (item) => {
     if (!user) {
       toast.error("Please login to add items to cart");
@@ -64,40 +73,70 @@ function Product() {
       return;
     }
 
-    const cartItem = {
-      userId: user.id,
-      productId: item.id,
-      productName: item.name,
-      price: item.price,
-      quantity: 1,
-      image: item.image,
-      date: new Date().toISOString(),
-    };
-
     try {
-      await fetch("http://localhost:3001/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cartItem),
-      });
+      // 1️⃣ Check if item exists in server cart
+      const serverCheck = await fetch(
+        `http://localhost:3002/cart?userId=${user.id}&productId=${item.id}`
+      );
+      const existsDB = await serverCheck.json();
 
-      let oldCart = JSON.parse(localStorage.getItem("cart")) || [];
-      const existing = oldCart.find((c) => c.id === item.id);
-
-      if (existing) {
-        existing.quantity += 1;
+      if (existsDB.length > 0) {
+        // Update server quantity
+        await fetch(`http://localhost:3002/cart/${existsDB[0].id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity: existsDB[0].quantity + 1 }),
+        });
       } else {
-        oldCart.push({ ...item, quantity: 1 });
+        // Add new entry to server
+        await fetch("http://localhost:3002/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.id,
+            productId: item.id,
+            productName: item.name,
+            price: item.price,
+            quantity: 1,
+            image: item.image,
+            date: new Date().toISOString(),
+          }),
+        });
       }
 
-      localStorage.setItem("cart", JSON.stringify(oldCart));
-      window.dispatchEvent(new Event("storage"));
+      // 2️⃣ Update LocalStorage Cart
+      let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const existingLocal = localCart.find(
+        (c) => Number(c.productId) === Number(item.id)
+      );
+
+      if (existingLocal) {
+        existingLocal.quantity += 1;
+      } else {
+        localCart.push({
+          productId: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: 1,
+        });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(localCart));
+
+      // Custom event to update navbar count
+      window.dispatchEvent(new Event("updateCart"));
+
       toast.success(`${item.name} added to cart`);
     } catch (error) {
       toast.error("Failed to add item to cart!");
     }
   };
 
+  // -----------------------------------------
+  // ADD TO WISHLIST (SERVER + LOCAL) FIXED ✔
+  // -----------------------------------------
   const addToWishlist = async (item) => {
     if (!user) {
       toast.error("Please login to add items to wishlist");
@@ -105,35 +144,61 @@ function Product() {
       return;
     }
 
-    const wishItem = {
-      userId: user.id,
-      productId: item.id,
-      productName: item.name,
-      price: item.price,
-      image: item.image,
-      date: new Date().toISOString(),
-    };
-
     try {
-      await fetch("http://localhost:3001/wishlist", {
+      // Check if already in wishlist (server)
+      const check = await fetch(
+        `http://localhost:3002/wishlist?userId=${user.id}&productId=${item.id}`
+      );
+      const existsDB = await check.json();
+
+      if (existsDB.length > 0) {
+        toast.info("Already in wishlist");
+        return;
+      }
+
+      // Add to server wishlist
+      await fetch("http://localhost:3002/wishlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(wishItem),
+        body: JSON.stringify({
+          userId: user.id,
+          productId: item.id,
+          productName: item.name,
+          price: item.price,
+          image: item.image,
+          date: new Date().toISOString(),
+        }),
       });
 
+      // Update LocalStorage
       let oldWish = JSON.parse(localStorage.getItem("wishlist")) || [];
-      const exists = oldWish.find((w) => w.id === item.id);
 
-      if (!exists) oldWish.push(item);
+      const existsLocal = oldWish.find(
+        (w) => Number(w.id) === Number(item.id)
+      );
+
+      if (!existsLocal) {
+        oldWish.push({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+        });
+      }
 
       localStorage.setItem("wishlist", JSON.stringify(oldWish));
-      window.dispatchEvent(new Event("storage"));
+
+      window.dispatchEvent(new Event("updateWishlist"));
+
       toast.success(`${item.name} added to wishlist`);
     } catch (error) {
       toast.error("Failed to add item to wishlist!");
     }
   };
 
+  // -----------------------------------------
+  // LOADING SCREEN
+  // -----------------------------------------
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center text-xl text-amber-600">
@@ -142,9 +207,14 @@ function Product() {
     );
   }
 
+  // -----------------------------------------
+  // MAIN UI
+  // -----------------------------------------
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="container mx-auto">
+        
+        {/* Search Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
             Our Delicious Cakes
@@ -164,6 +234,7 @@ function Product() {
           </div>
         </div>
 
+        {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredProducts.map((item) => (
             <div
@@ -171,11 +242,7 @@ function Product() {
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
             >
               <div className="relative">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-48 object-cover"
-                />
+                <img src={item.image} alt={item.name} className="w-full h-48 object-cover" />
                 <span className="absolute top-3 left-3 bg-amber-500 text-white px-2 py-1 rounded text-xs">
                   {item.category}
                 </span>
@@ -183,9 +250,7 @@ function Product() {
 
               <div className="p-4">
                 <h3 className="text-lg font-semibold">{item.name}</h3>
-                <p className="text-amber-600 font-bold text-xl mb-3">
-                  ₹{item.price}
-                </p>
+                <p className="text-amber-600 font-bold text-xl mb-3">₹{item.price}</p>
 
                 <div className="flex gap-2">
                   <button
@@ -213,6 +278,7 @@ function Product() {
           </div>
         )}
       </div>
+
       <Footer />
     </div>
   );

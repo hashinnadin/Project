@@ -16,6 +16,7 @@ function Wishlist() {
     }
     setUser(userData);
   }, []);
+
   useEffect(() => {
     if (user) loadWishlistItems();
   }, [user]);
@@ -23,15 +24,20 @@ function Wishlist() {
   const loadWishlistItems = async () => {
     try {
       const localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-      const response = await fetch(`http://localhost:3001/wishlist?userId=${user.id}`);
-      const dbWishlist = await response.json();
 
+      const response = await fetch(
+        `http://localhost:3002/wishlist?userId=${user.id}`
+      );
+      const dbWishlist = await response.json();
+      
       const merged = [...localWishlist];
 
       dbWishlist.forEach((dbItem) => {
-        if (!merged.find((item) => item.id === dbItem.productId)) {
+        const productId = Number(dbItem.productId);
+
+        if (!merged.find((item) => Number(item.id) === productId)) {
           merged.push({
-            id: dbItem.productId,
+            id: productId,
             name: dbItem.productName,
             price: dbItem.price,
             image: dbItem.image,
@@ -47,20 +53,22 @@ function Wishlist() {
       setLoading(false);
     }
   };
-
   const removeFromWishlist = async (itemId) => {
-    const updated = wishlistItems.filter((item) => item.id !== itemId);
+    const updated = wishlistItems.filter(
+      (item) => Number(item.id) !== Number(itemId)
+    );
+
     setWishlistItems(updated);
     localStorage.setItem("wishlist", JSON.stringify(updated));
 
     try {
       const res = await fetch(
-        `http://localhost:3001/wishlist?userId=${user.id}&productId=${itemId}`
+        `http://localhost:3002/wishlist?userId=${user.id}&productId=${itemId}`
       );
       const existing = await res.json();
 
       if (existing.length > 0) {
-        await fetch(`http://localhost:3001/wishlist/${existing[0].id}`, {
+        await fetch(`http://localhost:3002/wishlist/${existing[0].id}`, {
           method: "DELETE",
         });
       }
@@ -80,7 +88,7 @@ function Wishlist() {
     }
 
     const oldCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingLocal = oldCart.find((c) => c.id === item.id);
+    const existingLocal = oldCart.find((c) => Number(c.id) === Number(item.id));
 
     if (existingLocal) {
       existingLocal.quantity += 1;
@@ -92,17 +100,17 @@ function Wishlist() {
 
     try {
       const check = await fetch(
-        `http://localhost:3001/cart?userId=${user.id}&productId=${item.id}`
+        `http://localhost:3002/cart?userId=${user.id}&productId=${item.id}`
       );
       const exists = await check.json();
 
       if (exists.length === 0) {
-        await fetch("http://localhost:3001/cart", {
+        await fetch("http://localhost:3002/cart", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId: user.id,
-            productId: item.id,
+            productId: Number(item.id),
             productName: item.name,
             price: item.price,
             quantity: 1,
@@ -111,7 +119,7 @@ function Wishlist() {
           }),
         });
       } else {
-        await fetch(`http://localhost:3001/cart/${exists[0].id}`, {
+        await fetch(`http://localhost:3002/cart/${exists[0].id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ quantity: exists[0].quantity + 1 }),
@@ -134,11 +142,11 @@ function Wishlist() {
     localStorage.setItem("wishlist", "[]");
 
     try {
-      const res = await fetch(`http://localhost:3001/wishlist?userId=${user.id}`);
+      const res = await fetch(`http://localhost:3002/wishlist?userId=${user.id}`);
       const dbItems = await res.json();
 
       for (const w of dbItems) {
-        await fetch(`http://localhost:3001/wishlist/${w.id}`, {
+        await fetch(`http://localhost:3002/wishlist/${w.id}`, {
           method: "DELETE",
         });
       }

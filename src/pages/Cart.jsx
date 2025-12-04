@@ -6,6 +6,7 @@ function Cart() {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -19,11 +20,10 @@ function Cart() {
   const loadCart = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/cart?userId=${user.id}`
+        `http://localhost:3002/cart?userId=${user.id}`
       );
       const data = await response.json();
 
-      // Convert productId (string) -> number
       const formatted = data.map((item) => ({
         id: Number(item.productId),
         name: item.productName,
@@ -55,7 +55,7 @@ function Cart() {
     const item = updated.find((i) => i.id == productId);
 
     try {
-      await fetch(`http://localhost:3001/cart/${item.dbId}`, {
+      await fetch(`http://localhost:3002/cart/${item.dbId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: qty }),
@@ -71,7 +71,7 @@ function Cart() {
     const item = cartItems.find((i) => i.id == productId);
 
     try {
-      await fetch(`http://localhost:3001/cart/${item.dbId}`, {
+      await fetch(`http://localhost:3002/cart/${item.dbId}`, {
         method: "DELETE",
       });
     } catch {

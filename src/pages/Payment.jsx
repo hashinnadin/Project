@@ -40,10 +40,8 @@ function Payment() {
 
   const [addressErrors, setAddressErrors] = useState({});
 
-  // User
   const [user, setUser] = useState(null);
 
-  // Load user & cart
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem("user"));
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -58,11 +56,9 @@ function Payment() {
     setCartItems(cart);
   }, []);
 
-  // subtotal
   const getTotalPrice = () =>
     cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  // format input
   const handleChange = (e) => {
     const { name, value } = e.target;
     let v = value;
@@ -79,19 +75,16 @@ function Payment() {
     setErrors({ ...errors, [name]: "" });
   };
 
-  // address change
   const handleAddressInput = (e) => {
     const { name, value } = e.target;
     setAddress({ ...address, [name]: value });
     setAddressErrors({ ...addressErrors, [name]: "" });
   };
 
-  // validation
   const validate = () => {
     const err = {};
     const addrErr = {};
 
-    // card validation
     if (paymentMethod === "card") {
       if (!formData.cardNumber) err.cardNumber = "Required";
       else if (formData.cardNumber.replace(/\s/g, "").length !== 16)
@@ -102,12 +95,10 @@ function Payment() {
       if (!formData.nameOnCard.trim()) err.nameOnCard = "Required";
     }
 
-    // UPI validation
     if (paymentMethod === "upi") {
       if (!formData.upiId) err.upiId = "Enter UPI ID";
     }
 
-    // address validation (for both)
     const required = ["fullName", "mobile", "house", "street", "city", "pincode", "state"];
 
     required.forEach((field) => {
@@ -145,7 +136,7 @@ function Payment() {
       const order = {
         userId: user.id,
         items: cartItems,
-        totalAmount: getTotalPrice(), // No tax, no delivery
+        totalAmount: getTotalPrice(), 
         paymentMethod,
         paymentStatus: "completed",
         address,
@@ -153,18 +144,17 @@ function Payment() {
         status: "Success",
       };
 
-      await fetch("http://localhost:3001/orders", {
+      await fetch("http://localhost:3002/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order),
       });
 
-      // clear server cart
-      const r = await fetch(`http://localhost:3001/cart?userId=${user.id}`);
+      const r = await fetch(`http://localhost:3002/cart?userId=${user.id}`);
       const serverCart = await r.json();
 
       for (const it of serverCart) {
-        await fetch(`http://localhost:3001/cart/${it.id}`, { method: "DELETE" });
+        await fetch(`http://localhost:3002/cart/${it.id}`, { method: "DELETE" });
       }
 
       localStorage.setItem("cart", JSON.stringify([]));
@@ -190,7 +180,6 @@ function Payment() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          {/* Left */}
           <div className="bg-white p-6 rounded-xl shadow">
 
             <h2 className="text-xl font-bold mb-4">Select Payment Method</h2>
@@ -217,7 +206,6 @@ function Payment() {
 
             <form onSubmit={handlePayment}>
 
-              {/* Card Payment */}
               {paymentMethod === "card" && (
                 <div className="space-y-4">
                   <input
@@ -263,7 +251,6 @@ function Payment() {
                 </div>
               )}
 
-              {/* UPI */}
               {paymentMethod === "upi" && (
                 <input
                   type="text"
@@ -275,7 +262,6 @@ function Payment() {
                 />
               )}
 
-              {/* Delivery Address for BOTH */}
               <h2 className="text-lg font-bold mt-6 mb-2">Delivery Address</h2>
 
               {[
@@ -308,7 +294,6 @@ function Payment() {
             </form>
           </div>
 
-          {/* Right */}
           <div className="bg-white p-6 rounded-xl shadow h-fit">
             <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 

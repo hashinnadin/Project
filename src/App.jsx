@@ -9,6 +9,9 @@ import Cart from "./pages/Cart";
 import Product from "./compenent/Products";
 import Wishlist from "./pages/Wishlist";
 import Payment from "./pages/Payment";
+import Orders from "./pages/Orders";
+import OrderDetails from "./pages/OrderDetails";
+
 import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -21,7 +24,6 @@ function App() {
     setLoading(false);
   }, []);
 
-  // -------- Protected Route ----------
   const ProtectedRoute = ({ children }) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -37,7 +39,6 @@ function App() {
     );
   };
 
-  // -------- Public Route (Login/Register) ----------
   const PublicRoute = ({ children }) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -51,12 +52,9 @@ function App() {
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-white">Loading...</div>;
   }
-
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* PUBLIC ROUTES */}
         <Route
           path="/register"
           element={
@@ -67,6 +65,24 @@ function App() {
         />
 
         <Route
+  path="/orders"
+  element={
+    <ProtectedRoute>
+      <Orders />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/orders/:id"
+  element={
+    <ProtectedRoute>
+      <OrderDetails />
+    </ProtectedRoute>
+  }
+/>
+
+        <Route
           path="/login"
           element={
             <PublicRoute>
@@ -74,8 +90,6 @@ function App() {
             </PublicRoute>
           }
         />
-
-        {/* HOME (Public but Navbar visible always) */}
         <Route
           path="/"
           element={
@@ -85,8 +99,6 @@ function App() {
             </>
           }
         />
-
-        {/* PROTECTED ROUTES */}
         <Route
           path="/products"
           element={
@@ -95,7 +107,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/cart"
           element={
@@ -104,7 +115,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/wishlist"
           element={
@@ -113,8 +123,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        <Route
+              <Route
           path="/payment"
           element={
             <ProtectedRoute>
@@ -122,8 +131,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Unknown route redirect */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
@@ -131,5 +138,4 @@ function App() {
     </BrowserRouter>
   );
 }
-
 export default App;

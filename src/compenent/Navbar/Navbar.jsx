@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaSearch, FaShoppingCart, FaHeart, FaSignOutAlt } from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaHeart, FaSignOutAlt, FaList } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 function Navbar() {
@@ -21,7 +21,6 @@ function Navbar() {
     const updateCounts = () => {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-
       const cartTotal = cart.reduce((total, item) => total + (item.quantity || 1), 0);
 
       setCartCount(cartTotal);
@@ -29,16 +28,21 @@ function Navbar() {
     };
 
     updateCounts();
-    window.addEventListener("storage", updateCounts);
 
-    return () => window.removeEventListener("storage", updateCounts);
+    window.addEventListener("updateCart", updateCounts);
+    window.addEventListener("updateWishlist", updateCounts);
+
+    return () => {
+      window.removeEventListener("updateCart", updateCounts);
+      window.removeEventListener("updateWishlist", updateCounts);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("cart");
     localStorage.removeItem("wishlist");
-    
+
     setUser(null);
     setCartCount(0);
     setWishlistCount(0);
@@ -73,30 +77,37 @@ function Navbar() {
     }
   };
 
+  const handleOrdersClick = () => {
+    if (!user) {
+      toast.error("Please login to view orders");
+      navigate("/login");
+    } else {
+      navigate("/orders");
+    }
+  };
+
   const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-     
       <div className="container mx-auto px-4">
+        
         <div className="flex items-center justify-between py-4">
-          <div
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={() => navigate("/")}
-          >
-            <img src={logo} className="w-12 h-12 rounded-full" alt="BakeHub Logo" />
-            <span className="text-2xl font-bold text-amber-800 hidden sm:block">
-              BakeHub
-            </span>
+
+          {/* Logo */}
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
+            <img src={logo} className="w-12 h-12 rounded-full" />
+            <span className="text-2xl font-bold text-amber-800 hidden sm:block">BakeHub</span>
           </div>
-      
+
+          {/* Desktop menu */}
           <ul className="hidden lg:flex items-center gap-8 text-gray-700 text-lg">
+
             <li
               className={`cursor-pointer hover:text-amber-600 ${
                 isActive("/") ? "text-amber-600 font-semibold" : ""
               }`}
-              onClick={() => navigate("/")}
-            >
+              onClick={() => navigate("/")}>
               Home
             </li>
 
@@ -104,22 +115,28 @@ function Navbar() {
               className={`cursor-pointer hover:text-amber-600 ${
                 isActive("/products") ? "text-amber-600 font-semibold" : ""
               }`}
-              onClick={() => navigate("/products")}
-            >
+              onClick={() => navigate("/products")}>
               All Cakes
             </li>
+
+            {/* NEW – Orders */}
+            <li
+              className={`cursor-pointer hover:text-amber-600 ${
+                isActive("/orders") ? "text-amber-600 font-semibold" : ""
+              }`}
+              onClick={handleOrdersClick}>
+              My Orders
+            </li>
+
           </ul>
+
+          {/* Right Section */}
           <div className="flex items-center gap-6">
-            <button 
-              className="md:hidden text-gray-600 hover:text-amber-600"
-              onClick={() => navigate("/products")}
-            >
-              <FaSearch className="text-lg" />
-            </button>
+            
+            {/* Wishlist */}
             <div
               className="relative cursor-pointer flex items-center gap-2 text-gray-600 hover:text-amber-600"
-              onClick={handleWishlistClick}
-            >
+              onClick={handleWishlistClick}>
               <FaHeart />
               <span className="hidden sm:block text-sm">Wishlist</span>
               {wishlistCount > 0 && (
@@ -128,10 +145,11 @@ function Navbar() {
                 </span>
               )}
             </div>
+
+            {/* Cart */}
             <div
               className="relative cursor-pointer flex items-center gap-2 text-gray-600 hover:text-amber-600"
-              onClick={handleCartClick}
-            >
+              onClick={handleCartClick}>
               <FaShoppingCart />
               <span className="hidden sm:block text-sm">Cart</span>
               {cartCount > 0 && (
@@ -140,15 +158,14 @@ function Navbar() {
                 </span>
               )}
             </div>
+
+            {/* Login / Logout */}
             {user ? (
               <div className="flex items-center gap-4">
-                <span className="hidden md:block text-gray-700 font-medium">
-                  Hi, {user.username}
-                </span>
+                <span className="hidden md:block text-gray-700 font-medium">Hi, {user.username}</span>
                 <button
                   onClick={handleLogout}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-                >
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
                   <FaSignOutAlt />
                   <span className="hidden sm:inline">Logout</span>
                 </button>
@@ -156,83 +173,58 @@ function Navbar() {
             ) : (
               <button
                 onClick={() => navigate("/login")}
-                className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-medium"
-              >
+                className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-medium">
                 Login
               </button>
             )}
+
+            {/* Mobile menu button */}
             <button
               className="lg:hidden text-gray-600 hover:text-amber-600"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
+              onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <div className="text-2xl">☰</div>
             </button>
+
           </div>
         </div>
+
+        {/* Mobile menu */}
         {isMenuOpen && (
           <div className="lg:hidden border-t py-4 bg-white">
             <div className="flex flex-col space-y-4">
 
-              <div
-                className={`cursor-pointer ${
-                  isActive("/") ? "text-amber-600" : "text-gray-700"
-                }`}
-                onClick={() => {
-                  navigate("/");
-                  setIsMenuOpen(false);
-                }}
-              >
-                Home
-              </div>
+              <div className="cursor-pointer text-gray-700" onClick={() => navigate("/")}>Home</div>
 
-              <div
-                className={`cursor-pointer ${
-                  isActive("/products") ? "text-amber-600" : "text-gray-700"
-                }`}
-                onClick={() => {
-                  navigate("/products");
-                  setIsMenuOpen(false);
-                }}
-              >
-                All Cakes
-              </div>
+              <div className="cursor-pointer text-gray-700" onClick={() => navigate("/products")}>All Cakes</div>
 
-              <div className="cursor-pointer text-gray-700" onClick={handleWishlistClick}>
-                Wishlist
-              </div>
+              <div className="cursor-pointer text-gray-700" onClick={handleOrdersClick}>My Orders</div>
 
-              <div className="cursor-pointer text-gray-700" onClick={handleCartClick}>
-                Cart
-              </div>
+              <div className="cursor-pointer text-gray-700" onClick={handleWishlistClick}>Wishlist</div>
+
+              <div className="cursor-pointer text-gray-700" onClick={handleCartClick}>Cart</div>
+
               <div className="border-t pt-4 flex flex-col space-y-3">
                 {user ? (
                   <>
-                    <div className="text-gray-700 font-medium">
-                      Welcome, {user.username}
-                    </div>
+                    <div className="text-gray-700 font-medium">Welcome, {user.username}</div>
                     <button
                       onClick={handleLogout}
-                      className="bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
-                    >
+                      className="bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg">
                       Logout
                     </button>
                   </>
                 ) : (
                   <button
-                    onClick={() => {
-                      navigate("/login");
-                      setIsMenuOpen(false);
-                    }}
-                    className="bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg"
-                  >
+                    onClick={() => navigate("/login")}
+                    className="bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg">
                     Login
                   </button>
                 )}
               </div>
+
             </div>
           </div>
         )}
-
       </div>
     </nav>
   );
