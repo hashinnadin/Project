@@ -11,6 +11,14 @@ import Wishlist from "./pages/Wishlist";
 import Payment from "./pages/Payment";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
+import AdminNavbar from  "./admin/AdminNavbar";
+import AdminAddProducts from "./admin/AdminAddProducts";
+import AdminEditProduct from "./admin/AdminEditProduct";
+import AdminLogin from "./admin/AdminLogin";
+import AdminOrders from "./admin/AdminOrders";
+import AdminProducts from "./admin/AdminProducts";
+import AdminUsers from "./admin/AdminUsers";
+import Dashboard from "./admin/Dashboard";
 
 import { useEffect, useState } from "react";
 import AOS from "aos";
@@ -23,6 +31,21 @@ function App() {
     AOS.init({ duration: 800, once: true });
     setLoading(false);
   }, []);
+
+
+  // Admin protuct
+  const AdminProtected = ({ children }) => {
+  const admin = JSON.parse(localStorage.getItem("admin"));
+  return admin ? (
+    <>
+      <AdminNavbar />
+      {children}
+    </>
+  ) : (
+    <Navigate to="/admin-login" />
+  );
+};
+
 
   const ProtectedRoute = ({ children }) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -55,6 +78,36 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+   {/* admin  side   */}
+        <Route path="/admin-login" element={<AdminLogin />} />
+
+<Route path="/admin" element={<AdminProtected><Dashboard /></AdminProtected>} />
+
+<Route
+  path="/admin/products"
+  element={<AdminProtected><AdminProducts /></AdminProtected>}
+/>
+
+<Route
+  path="/admin/products/add"
+  element={<AdminProtected><AdminAddProducts /></AdminProtected>}
+/>
+
+<Route
+  path="/admin/products/edit/:id"
+  element={<AdminProtected><AdminEditProduct /></AdminProtected>}
+/>
+
+<Route
+  path="/admin/orders"
+  element={<AdminProtected><AdminOrders /></AdminProtected>}
+/>
+
+<Route
+  path="/admin/users"
+  element={<AdminProtected><AdminUsers /></AdminProtected>}
+/>
+
         <Route
           path="/register"
           element={

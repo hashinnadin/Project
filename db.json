@@ -1,4 +1,11 @@
 {
+  "admin": [
+  {
+    "id": "admin001",
+    "email": "admin@gmail.com",
+    "password": "admin123"
+  }
+],
   "users": [
     {
       "id": "1",
@@ -211,26 +218,7 @@
     }
   ],
   "cart": [
-    {
-      "id": "ceec",
-      "userId": "8270",
-      "productId": 3,
-      "productName": "Black Forest Cake",
-      "price": 900,
-      "quantity": 1,
-      "image": "/cake/cake3.avif",
-      "date": "2025-12-03T07:52:28.599Z"
-    },
-    {
-      "id": "9eff",
-      "userId": "1",
-      "productId": "4",
-      "productName": "Party Mix Cake",
-      "price": 900,
-      "image": "/cake/cake4.avif",
-      "quantity": 1,
-      "date": "2025-12-04T06:36:01.961Z"
-    }
+   
   ],
   "wishlist": [
     {
@@ -253,70 +241,7 @@
     }
   ],
   "orders": [
-    {
-      "id": "52a3",
-      "userId": "3087",
-      "items": [
-        {
-          "id": 1,
-          "name": "Straw Velvet Cake",
-          "price": 800,
-          "quantity": 1,
-          "image": "/cake/cake1.avif",
-          "dbId": "edc2"
-        },
-        {
-          "id": 2,
-          "name": "Choco Cream Cake",
-          "price": 750,
-          "quantity": 1,
-          "image": "/cake/cake2.avif",
-          "dbId": "b67b"
-        }
-      ],
-      "totalAmount": 1550,
-      "paymentMethod": "upi",
-      "paymentStatus": "completed",
-      "address": {
-        "fullName": "hashin",
-        "mobile": "9745118404",
-        "house": "kolappuram",
-        "street": "klpm",
-        "city": "vengara",
-        "pincode": "676305",
-        "state": "kerala"
-      },
-      "date": "2025-12-03T12:53:03.794Z",
-      "status": "Success"
-    },
-    {
-      "id": "7883",
-      "userId": "1",
-      "items": [
-        {
-          "id": 2,
-          "name": "Choco Cream Cake",
-          "price": 750,
-          "quantity": 3,
-          "image": "/cake/cake2.avif",
-          "dbId": "6204"
-        }
-      ],
-      "totalAmount": 2250,
-      "paymentMethod": "upi",
-      "paymentStatus": "completed",
-      "address": {
-        "fullName": "hashin",
-        "mobile": "9745118404",
-        "house": "kolappuram",
-        "street": "klpm",
-        "city": "vengara",
-        "pincode": "676305",
-        "state": "kerala"
-      },
-      "date": "2025-12-04T06:32:05.219Z",
-      "status": "Success"
-    },
+   
     {
       "id": "83db",
       "userId": "1",
