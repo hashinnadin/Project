@@ -14,9 +14,6 @@ function Product() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // -----------------------------------------
-  // Load products + read search query
-  // -----------------------------------------
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const searchQuery = params.get("search") || "";
@@ -39,9 +36,6 @@ function Product() {
     }
   };
 
-  // -----------------------------------------
-  // SEARCH FILTER
-  // -----------------------------------------
   const filterProducts = (list, term) => {
     if (!term.trim()) {
       setFilteredProducts(list);
@@ -63,9 +57,6 @@ function Product() {
     filterProducts(products, value);
   };
 
-  // -----------------------------------------
-  // ADD TO CART (SERVER + LOCAL) FIXED ✔
-  // -----------------------------------------
   const addToCart = async (item) => {
     if (!user) {
       toast.error("Please login to add items to cart");
@@ -74,21 +65,19 @@ function Product() {
     }
 
     try {
-      // 1️⃣ Check if item exists in server cart
       const serverCheck = await fetch(
         `http://localhost:3002/cart?userId=${user.id}&productId=${item.id}`
       );
       const existsDB = await serverCheck.json();
 
       if (existsDB.length > 0) {
-        // Update server quantity
+
         await fetch(`http://localhost:3002/cart/${existsDB[0].id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ quantity: existsDB[0].quantity + 1 }),
         });
       } else {
-        // Add new entry to server
         await fetch("http://localhost:3002/cart", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -104,7 +93,6 @@ function Product() {
         });
       }
 
-      // 2️⃣ Update LocalStorage Cart
       let localCart = JSON.parse(localStorage.getItem("cart")) || [];
 
       const existingLocal = localCart.find(
@@ -125,7 +113,6 @@ function Product() {
 
       localStorage.setItem("cart", JSON.stringify(localCart));
 
-      // Custom event to update navbar count
       window.dispatchEvent(new Event("updateCart"));
 
       toast.success(`${item.name} added to cart`);
@@ -134,9 +121,6 @@ function Product() {
     }
   };
 
-  // -----------------------------------------
-  // ADD TO WISHLIST (SERVER + LOCAL) FIXED ✔
-  // -----------------------------------------
   const addToWishlist = async (item) => {
     if (!user) {
       toast.error("Please login to add items to wishlist");
@@ -145,7 +129,6 @@ function Product() {
     }
 
     try {
-      // Check if already in wishlist (server)
       const check = await fetch(
         `http://localhost:3002/wishlist?userId=${user.id}&productId=${item.id}`
       );
@@ -156,7 +139,6 @@ function Product() {
         return;
       }
 
-      // Add to server wishlist
       await fetch("http://localhost:3002/wishlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -170,7 +152,6 @@ function Product() {
         }),
       });
 
-      // Update LocalStorage
       let oldWish = JSON.parse(localStorage.getItem("wishlist")) || [];
 
       const existsLocal = oldWish.find(
@@ -196,9 +177,6 @@ function Product() {
     }
   };
 
-  // -----------------------------------------
-  // LOADING SCREEN
-  // -----------------------------------------
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center text-xl text-amber-600">
@@ -207,14 +185,10 @@ function Product() {
     );
   }
 
-  // -----------------------------------------
-  // MAIN UI
-  // -----------------------------------------
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="container mx-auto">
         
-        {/* Search Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
             Our Delicious Cakes

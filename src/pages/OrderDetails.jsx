@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function OrderDetails() {
-  const { id } = useParams(); // URL il ninn order id kittunnu
+  const { id } = useParams(); 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -102,7 +102,6 @@ function OrderDetails() {
           </div>
         </div>
 
-        {/* Items */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">
             Ordered Items
@@ -139,9 +138,8 @@ function OrderDetails() {
           </div>
         </div>
 
-        {/* Address + Payment */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Address */}
+=        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           <div className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">
               Delivery Address
@@ -157,7 +155,6 @@ function OrderDetails() {
             <p className="text-gray-700">{addr.state}</p>
           </div>
 
-          {/* Payment Info */}
           <div className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">
               Payment Details

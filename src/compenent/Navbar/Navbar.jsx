@@ -94,13 +94,11 @@ function Navbar() {
         
         <div className="flex items-center justify-between py-4">
 
-          {/* Logo */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
             <img src={logo} className="w-12 h-12 rounded-full" />
             <span className="text-2xl font-bold text-amber-800 hidden sm:block">BakeHub</span>
           </div>
 
-          {/* Desktop menu */}
           <ul className="hidden lg:flex items-center gap-8 text-gray-700 text-lg">
 
             <li
@@ -130,10 +128,8 @@ function Navbar() {
 
           </ul>
 
-          {/* Right Section */}
           <div className="flex items-center gap-6">
             
-            {/* Wishlist */}
             <div
               className="relative cursor-pointer flex items-center gap-2 text-gray-600 hover:text-amber-600"
               onClick={handleWishlistClick}>
@@ -146,7 +142,6 @@ function Navbar() {
               )}
             </div>
 
-            {/* Cart */}
             <div
               className="relative cursor-pointer flex items-center gap-2 text-gray-600 hover:text-amber-600"
               onClick={handleCartClick}>
@@ -159,7 +154,6 @@ function Navbar() {
               )}
             </div>
 
-            {/* Login / Logout */}
             {user ? (
               <div className="flex items-center gap-4">
                 <span className="hidden md:block text-gray-700 font-medium">Hi, {user.username}</span>
@@ -178,7 +172,6 @@ function Navbar() {
               </button>
             )}
 
-            {/* Mobile menu button */}
             <button
               className="lg:hidden text-gray-600 hover:text-amber-600"
               onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -188,7 +181,6 @@ function Navbar() {
           </div>
         </div>
 
-        {/* Mobile menu */}
         {isMenuOpen && (
           <div className="lg:hidden border-t py-4 bg-white">
             <div className="flex flex-col space-y-4">
