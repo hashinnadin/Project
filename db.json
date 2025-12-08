@@ -1,24 +1,12 @@
 {
   "admin": [
-  {
-    "id": "admin001",
-    "email": "admin@gmail.com",
-    "password": "admin123"
-  }
-],
+    {
+      "id": "admin001",
+      "email": "admin@gmail.com",
+      "password": "admin123"
+    }
+  ],
   "users": [
-    {
-      "id": "1",
-      "username": "Hashin",
-      "email": "hashinnadin@gmail.com",
-      "password": "1234"
-    },
-    {
-      "id": "d63c",
-      "username": "shanu",
-      "email": "h@gmal.com",
-      "password": "12345"
-    },
     {
       "id": "76ec",
       "username": "hashin",
@@ -41,6 +29,12 @@
       "id": "ee10",
       "username": "12343",
       "email": "hashinnatdin@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "2cc0",
+      "username": "Hashin",
+      "email": "y@gmail.com",
       "password": "1234"
     }
   ],
@@ -218,7 +212,36 @@
     }
   ],
   "cart": [
-   
+    {
+      "id": "89a9",
+      "userId": "1",
+      "productId": "2",
+      "productName": "Choco Cream Cake",
+      "price": 750,
+      "image": "/cake/cake2.avif",
+      "quantity": 1,
+      "date": "2025-12-04T13:04:19.214Z"
+    },
+    {
+      "id": "d658",
+      "userId": "3087",
+      "productId": "1",
+      "productName": "Straw Velvet Cake",
+      "price": 800,
+      "quantity": 1,
+      "image": "/cake/cake1.avif",
+      "date": "2025-12-04T19:02:44.906Z"
+    },
+    {
+      "id": "e93a",
+      "userId": "2cc0",
+      "productId": "3",
+      "productName": "Black Forest Cake",
+      "price": 900,
+      "quantity": 1,
+      "image": "/cake/cake3.avif",
+      "date": "2025-12-06T10:17:57.825Z"
+    }
   ],
   "wishlist": [
     {
@@ -241,10 +264,9 @@
     }
   ],
   "orders": [
-   
     {
       "id": "83db",
-      "userId": "1",
+      "userId": null,
       "items": [
         {
           "id": 4,
@@ -268,6 +290,78 @@
         "state": "kerala"
       },
       "date": "2025-12-04T06:35:54.627Z",
+      "status": "Success"
+    },
+    {
+      "id": "ec73",
+      "userId": "3087",
+      "items": [
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 1,
+          "image": "/cake/cake2.avif",
+          "dbId": "ac1f"
+        }
+      ],
+      "totalAmount": 750,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "9745118404",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-04T13:09:25.083Z",
+      "status": "processing"
+    },
+    {
+      "id": "3371",
+      "userId": "2cc0",
+      "items": [
+        {
+          "id": 5,
+          "name": "Creamy Delight",
+          "price": 500,
+          "quantity": 1,
+          "image": "/cake/cake5.webp",
+          "dbId": 5
+        },
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 1,
+          "image": "/cake/cake2.avif",
+          "dbId": 2
+        },
+        {
+          "id": 6,
+          "name": "Special Chocolate Cake",
+          "price": 650,
+          "quantity": 1,
+          "image": "/cake/cake6.jpg",
+          "dbId": 6
+        }
+      ],
+      "totalAmount": 1900,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-06T10:17:41.594Z",
       "status": "Success"
     }
   ]

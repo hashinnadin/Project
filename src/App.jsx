@@ -18,8 +18,7 @@ import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 
 /* ADMIN COMPONENTS */
-import AdminNavbar from "./admin/AdminNavbar";
-import AdminLogin from "./admin/AdminLogin";
+// REMOVED: AdminNavbar import
 import Dashboard from "./admin/Dashboard";
 import AdminProducts from "./admin/AdminProducts";
 import AdminAddProducts from "./admin/AdminAddProducts";
@@ -30,26 +29,16 @@ import AdminUsers from "./admin/AdminUsers";
 function App() {
   const [loading, setLoading] = useState(true);
 
-  // Animation init
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
     setLoading(false);
   }, []);
 
-  /* ------------------------- ADMIN PROTECTED ROUTE ------------------------- */
   const AdminProtected = ({ children }) => {
     const admin = JSON.parse(localStorage.getItem("admin"));
-    return admin ? (
-      <>
-        <AdminNavbar />
-        {children}
-      </>
-    ) : (
-      <Navigate to="/admin-login" />
-    );
+    return admin ? children : <Navigate to="/admin-login" />;
   };
 
-  /* ------------------------- USER PROTECTED ROUTE -------------------------- */
   const ProtectedRoute = ({ children }) => {
     const user = JSON.parse(localStorage.getItem("user"));
     return user ? (
@@ -62,7 +51,6 @@ function App() {
     );
   };
 
-  /* ------------------------- USER PUBLIC ROUTE ----------------------------- */
   const PublicRoute = ({ children }) => {
     const user = JSON.parse(localStorage.getItem("user"));
     return user ? <Navigate to="/" replace /> : children;
@@ -79,10 +67,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* =========================== ADMIN ROUTES =========================== */}
-        <Route path="/admin-login" element={<AdminLogin />} />
-
         <Route
           path="/admin"
           element={
@@ -223,6 +208,7 @@ function App() {
 
         {/* ------------------ UNKNOWN ROUTES REDIRECT ------------------------- */}
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/admin-login" element={<Navigate to="/login" replace />} />
 
       </Routes>
 
