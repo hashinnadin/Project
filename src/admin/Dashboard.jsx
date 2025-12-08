@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { 
   FaUsers, FaBox, FaShoppingCart, FaRupeeSign, FaEye,
   FaHome, FaSignOutAlt, FaBars, FaTimes, FaPlus,
-  FaEdit, FaTachometerAlt,
+ FaTachometerAlt,
 } from "react-icons/fa";
 
 function Dashboard() {

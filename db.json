@@ -11,13 +11,15 @@
       "id": "76ec",
       "username": "hashin",
       "email": "fasalsabah07@gmail.com",
-      "password": "1234"
+      "password": "1234",
+      "status": "active"
     },
     {
       "id": "3087",
       "username": "hashin",
       "email": "hashinnadin2@gmail.com",
-      "password": "1234"
+      "password": "1234",
+      "status": "blocked"
     },
     {
       "id": "489b",
@@ -223,16 +225,6 @@
       "date": "2025-12-04T13:04:19.214Z"
     },
     {
-      "id": "d658",
-      "userId": "3087",
-      "productId": "1",
-      "productName": "Straw Velvet Cake",
-      "price": 800,
-      "quantity": 1,
-      "image": "/cake/cake1.avif",
-      "date": "2025-12-04T19:02:44.906Z"
-    },
-    {
       "id": "e93a",
       "userId": "2cc0",
       "productId": "3",
@@ -241,6 +233,16 @@
       "quantity": 1,
       "image": "/cake/cake3.avif",
       "date": "2025-12-06T10:17:57.825Z"
+    },
+    {
+      "id": "a482",
+      "userId": "3087",
+      "productId": "5",
+      "productName": "Creamy Delight",
+      "price": 500,
+      "image": "/cake/cake5.webp",
+      "quantity": 1,
+      "date": "2025-12-08T06:25:20.176Z"
     }
   ],
   "wishlist": [
@@ -318,7 +320,7 @@
         "state": "kerala"
       },
       "date": "2025-12-04T13:09:25.083Z",
-      "status": "processing"
+      "status": "Success"
     },
     {
       "id": "3371",
@@ -362,6 +364,42 @@
         "state": "kerala"
       },
       "date": "2025-12-06T10:17:41.594Z",
+      "status": "Success"
+    },
+    {
+      "id": "c7e9",
+      "userId": "3087",
+      "items": [
+        {
+          "id": 1,
+          "name": "Straw Velvet Cake",
+          "price": 800,
+          "quantity": 1,
+          "image": "/cake/cake1.avif",
+          "dbId": 1
+        },
+        {
+          "id": 5,
+          "name": "Creamy Delight",
+          "price": 500,
+          "quantity": 1,
+          "image": "/cake/cake5.webp",
+          "dbId": 5
+        }
+      ],
+      "totalAmount": 1300,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-08T06:11:08.189Z",
       "status": "Success"
     }
   ]

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaTrash, FaSearch, FaUser, FaHome, FaBox, FaShoppingCart, FaUsers, FaSignOutAlt, FaBars, FaTimes, FaTachometerAlt } from "react-icons/fa";
+import { FaBan, FaCheck, FaSearch, FaUser, FaHome, FaBox, FaShoppingCart, FaUsers, FaSignOutAlt, FaBars, FaTimes, FaTachometerAlt, FaLock, FaUnlock } from "react-icons/fa";
 
 function AdminUsers() {
   const navigate = useNavigate();
@@ -27,17 +27,31 @@ function AdminUsers() {
     loadUsers();
   }, []);
 
-  const deleteUser = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return;
+  const toggleUserStatus = async (id, currentStatus) => {
+    const action = currentStatus === "active" ? "block" : "unblock";
+    const confirmMessage = currentStatus === "active" 
+      ? "Are you sure you want to block this user?" 
+      : "Are you sure you want to unblock this user?";
+
+    if (!window.confirm(confirmMessage)) return;
+    
     try {
       const res = await fetch(`http://localhost:3002/users/${id}`, {
-        method: "DELETE",
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: currentStatus === "active" ? "blocked" : "active"
+        }),
       });
-      if (!res.ok) throw new Error("Unable to delete user");
-      toast.success("User deleted successfully");
+      
+      if (!res.ok) throw new Error("Unable to update user status");
+      
+      toast.success(`User ${action}ed successfully`);
       loadUsers();
     } catch (err) {
-      toast.error("Error deleting user!");
+      toast.error(`Error ${action}ing user!`);
     }
   };
 
@@ -199,6 +213,48 @@ function AdminUsers() {
             </div>
           </div>
           
+          {/* Stats Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white rounded-xl p-6 border border-[#D9CFC7] shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-[#8B7355]">Total Users</p>
+                  <p className="text-2xl font-bold text-[#5D4737]">{users.length}</p>
+                </div>
+                <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+                  <FaUsers className="text-blue-500 text-xl" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-6 border border-[#D9CFC7] shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-[#8B7355]">Active Users</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {users.filter(u => u.status === "active" || !u.status).length}
+                  </p>
+                </div>
+                <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
+                  <FaCheck className="text-green-500 text-xl" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-6 border border-[#D9CFC7] shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-[#8B7355]">Blocked Users</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {users.filter(u => u.status === "blocked").length}
+                  </p>
+                </div>
+                <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
+                  <FaBan className="text-red-500 text-xl" />
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Users Table */}
           <div className="bg-white rounded-xl shadow-sm border border-[#D9CFC7] overflow-hidden">
@@ -210,13 +266,14 @@ function AdminUsers() {
                     <th className="text-left py-4 px-6 text-sm font-medium text-[#5D4737]">Username</th>
                     <th className="text-left py-4 px-6 text-sm font-medium text-[#5D4737]">Email</th>
                     <th className="text-left py-4 px-6 text-sm font-medium text-[#5D4737]">Password</th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-[#5D4737]">Status</th>
                     <th className="text-left py-4 px-6 text-sm font-medium text-[#5D4737]">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#EFE9E3]">
                   {filteredUsers.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="py-12 text-center text-[#8B7355]">
+                      <td colSpan="6" className="py-12 text-center text-[#8B7355]">
                         No users found
                       </td>
                     </tr>
@@ -240,12 +297,47 @@ function AdminUsers() {
                           </span>
                         </td>
                         <td className="py-4 px-6">
+                          <span className={`
+                            inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium
+                            ${(user.status === "active" || !user.status) 
+                              ? "bg-green-50 text-green-700" 
+                              : "bg-red-50 text-red-700"
+                            }
+                          `}>
+                            {(user.status === "active" || !user.status) ? (
+                              <>
+                                <FaCheck /> Active
+                              </>
+                            ) : (
+                              <>
+                                <FaBan /> Blocked
+                              </>
+                            )}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6">
                           <button
-                            onClick={() => deleteUser(user.id)}
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-red-400 to-red-500 text-white font-medium hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200"
+                            onClick={() => toggleUserStatus(user.id, user.status || "active")}
+                            className={`
+                              flex items-center gap-2 px-4 py-2 rounded-lg font-medium 
+                              hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200
+                              ${(user.status === "active" || !user.status)
+                                ? "bg-gradient-to-r from-red-400 to-red-500 text-white"
+                                : "bg-gradient-to-r from-green-400 to-green-500 text-white"
+                              }
+                            `}
                           >
-                            <FaTrash />
-                            Delete
+                            {(user.status === "active" || !user.status) ? (
+                              <>
+                                <FaLock />
+                                Block User
+                              </>
+                            ) : (
+                              <>
+                                <FaUnlock />
+                                Unblock User
+                              </>
+                            )}
                           </button>
                         </td>
                       </tr>

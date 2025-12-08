@@ -70,14 +70,13 @@ function Login() {
       localStorage.removeItem("admin");
       
       toast.success("Login Successful!");
-      navigate("/"); // Redirect to home page
+      navigate("/"); 
     } catch (error) {
       console.error(error);
       toast.error("Server error!");
     }
   };
 
-  // Update the styling to match your color palette
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F9F8F6] to-[#EFE9E3]">
       <div className="absolute inset-0 bg-pattern opacity-5"></div>
