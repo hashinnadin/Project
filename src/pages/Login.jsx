@@ -37,26 +37,22 @@ function Login() {
 
     if (Object.keys(validationErrors).length !== 0) return;
 
-    // 🔐 Check if it's admin login first
     const ADMIN_EMAIL = "admin@gmail.com";
     const ADMIN_PASSWORD = "admin123";
 
     if (form.email === ADMIN_EMAIL && form.password === ADMIN_PASSWORD) {
-      // Save admin session
       localStorage.setItem(
         "admin",
         JSON.stringify({ email: ADMIN_EMAIL, role: "admin" })
       );
       
-      // Clear any existing user session
       localStorage.removeItem("user");
       
       toast.success("Admin login successful!");
-      navigate("/admin"); // Redirect to admin dashboard
+      navigate("/admin"); 
       return;
     }
 
-    // If not admin, check for regular user
     try {
       const res = await axios.get(
         `http://localhost:3002/users?email=${form.email}&password=${form.password}`
@@ -153,9 +149,9 @@ function Login() {
             </button>
           </p>
           
-          {/* Admin hint (optional - can be removed) */}
+        
           <p className="text-xs text-center text-[#C9B59C] mt-4">
-            Admin: admin@gmail.com / admin123
+    
           </p>
         </div>
       </form>
