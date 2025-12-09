@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+
 function Login() {
   const navigate = useNavigate();
 
@@ -12,6 +13,7 @@ function Login() {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -31,15 +33,20 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const validationErrors = validateForm();
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length !== 0) return;
+    if (Object.keys(validationErrors).length !== 0) {
+      setLoading(false);
+      return;
+    }
 
     const ADMIN_EMAIL = "admin@gmail.com";
     const ADMIN_PASSWORD = "admin123";
 
+    // Admin login
     if (form.email === ADMIN_EMAIL && form.password === ADMIN_PASSWORD) {
       localStorage.setItem(
         "admin",
@@ -50,30 +57,71 @@ function Login() {
       
       toast.success("Admin login successful!");
       navigate("/admin"); 
+      setLoading(false);
       return;
     }
 
     try {
-      const res = await axios.get(
-        `http://localhost:3002/users?email=${form.email}&password=${form.password}`
+      // Check for blocked users
+      const blockedCheck = await axios.get(
+        `http://localhost:3002/users?email=${form.email}&status=blocked`
       );
 
-      if (res.data.length === 0) {
-        toast.error("Invalid email or password");
+      if (blockedCheck.data.length > 0) {
+        toast.error("Your account has been blocked. Please contact support.");
+        setLoading(false);
         return;
       }
-      
-      // Save user session
+
+      // Check for active users
+      const res = await axios.get(
+        `http://localhost:3002/users?email=${form.email}&password=${form.password}&status=active`
+      );
+
+      // If no active user found, try without status filter (for backward compatibility)
+      if (res.data.length === 0) {
+        const fallbackRes = await axios.get(
+          `http://localhost:3002/users?email=${form.email}&password=${form.password}`
+        );
+        
+        if (fallbackRes.data.length === 0) {
+          toast.error("Invalid email or password");
+          setLoading(false);
+          return;
+        }
+        
+        // If user exists but doesn't have status field, save as active user
+        const userData = { ...fallbackRes.data[0], status: "active" };
+        localStorage.setItem("user", JSON.stringify(userData));
+        
+        // Update user status in database (optional)
+        try {
+          await axios.patch(`http://localhost:3002/users/${userData.id}`, {
+            status: "active"
+          });
+        } catch (updateError) {
+          console.log("Could not update user status, but login continues");
+        }
+        
+        toast.success("Login Successful!");
+        navigate("/");
+        setLoading(false);
+        return;
+      }
+
+      // Save active user session
       localStorage.setItem("user", JSON.stringify(res.data[0]));
       
       // Clear any existing admin session
       localStorage.removeItem("admin");
       
       toast.success("Login Successful!");
-      navigate("/"); 
+      navigate("/");
     } catch (error) {
       console.error(error);
       toast.error("Server error!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,7 +152,8 @@ function Login() {
               placeholder="Enter your email"
               value={form.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-[#D9CFC7] bg-[#F9F8F6] text-[#5D4737] placeholder-[#C9B59C] focus:outline-none focus:ring-2 focus:ring-[#C9B59C] focus:border-transparent transition-all duration-200"
+              disabled={loading}
+              className="w-full px-4 py-3 rounded-lg border border-[#D9CFC7] bg-[#F9F8F6] text-[#5D4737] placeholder-[#C9B59C] focus:outline-none focus:ring-2 focus:ring-[#C9B59C] focus:border-transparent transition-all duration-200 disabled:opacity-60"
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1 ml-1">{errors.email}</p>
@@ -121,7 +170,8 @@ function Login() {
               placeholder="Enter your password"
               value={form.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-[#D9CFC7] bg-[#F9F8F6] text-[#5D4737] placeholder-[#C9B59C] focus:outline-none focus:ring-2 focus:ring-[#C9B59C] focus:border-transparent transition-all duration-200"
+              disabled={loading}
+              className="w-full px-4 py-3 rounded-lg border border-[#D9CFC7] bg-[#F9F8F6] text-[#5D4737] placeholder-[#C9B59C] focus:outline-none focus:ring-2 focus:ring-[#C9B59C] focus:border-transparent transition-all duration-200 disabled:opacity-60"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1 ml-1">{errors.password}</p>
@@ -130,10 +180,25 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-gradient-to-r from-[#C9B59C] to-[#B8A48B] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#C9B59C] focus:ring-offset-2"
+            disabled={loading}
+            className="w-full py-3 px-4 bg-gradient-to-r from-[#C9B59C] to-[#B8A48B] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#C9B59C] focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
           >
-            Sign In
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Signing In...
+              </div>
+            ) : (
+              "Sign In"
+            )}
           </button>
+
+          {/* Admin login hint (remove in production) */}
+          <div className="text-center text-xs text-[#8B7355] bg-[#F9F8F6] p-3 rounded-lg border border-[#EFE9E3]">
+            <p className="font-medium mb-1">Admin Login:</p>
+            <p>Email: admin@gmail.com</p>
+            <p>Password: admin123</p>
+          </div>
         </div>
 
         <div className="mt-6 pt-6 border-t border-[#EFE9E3]">
@@ -142,20 +207,16 @@ function Login() {
             <button
               type="button"
               onClick={() => navigate("/register")}
-              className="text-[#C9B59C] hover:text-[#B8A48B] font-medium transition-colors"
+              disabled={loading}
+              className="text-[#C9B59C] hover:text-[#B8A48B] font-medium transition-colors disabled:opacity-60"
             >
               Create Account
             </button>
-          </p>
-          
-        
-          <p className="text-xs text-center text-[#C9B59C] mt-4">
-    
           </p>
         </div>
       </form>
     </div>
   );
 }
-
 export default Login;
+
