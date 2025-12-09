@@ -37,7 +37,16 @@
       "id": "2cc0",
       "username": "Hashin",
       "email": "y@gmail.com",
-      "password": "1234"
+      "password": "1234",
+      "status": "active"
+    },
+    {
+      "id": "2b89",
+      "username": "manhar",
+      "email": "manhar@gmail.com",
+      "password": "1234",
+      "status": "active",
+      "createdAt": "2025-12-09T09:07:15.319Z"
     }
   ],
   "products": [
@@ -223,16 +232,6 @@
       "image": "/cake/cake2.avif",
       "quantity": 1,
       "date": "2025-12-04T13:04:19.214Z"
-    },
-    {
-      "id": "e93a",
-      "userId": "2cc0",
-      "productId": "3",
-      "productName": "Black Forest Cake",
-      "price": 900,
-      "quantity": 1,
-      "image": "/cake/cake3.avif",
-      "date": "2025-12-06T10:17:57.825Z"
     }
   ],
   "wishlist": [
@@ -253,6 +252,15 @@
       "price": 750,
       "image": "/cake/cake2.avif",
       "date": "2025-12-03T07:55:20.326Z"
+    },
+    {
+      "id": "d363",
+      "userId": "3087",
+      "productId": "14",
+      "productName": "Eggless Dutch Truffle Cake 1 KG",
+      "price": 1200,
+      "image": "/cake/EgglessDutchTruffleCakeonekg.webp",
+      "date": "2025-12-09T07:36:32.402Z"
     }
   ],
   "orders": [
@@ -426,6 +434,117 @@
         "state": "kerala"
       },
       "date": "2025-12-09T05:21:02.337Z",
+      "status": "Success"
+    },
+    {
+      "id": "ec8c",
+      "userId": "2cc0",
+      "items": [
+        {
+          "id": 3,
+          "name": "Black Forest Cake",
+          "price": 900,
+          "quantity": 1,
+          "image": "/cake/cake3.avif",
+          "dbId": 3
+        }
+      ],
+      "totalAmount": 900,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-09T07:58:40.082Z",
+      "status": "Success"
+    },
+    {
+      "id": "969e",
+      "userId": "3087",
+      "items": [
+        {
+          "productId": "3",
+          "name": "Black Forest Cake",
+          "price": 900,
+          "image": "/cake/cake3.avif",
+          "quantity": 1
+        }
+      ],
+      "totalAmount": 900,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "mlpm",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-09T08:06:18.949Z",
+      "status": "Success"
+    },
+    {
+      "id": "f0c1",
+      "userId": "2cc0",
+      "items": [
+        {
+          "id": 11,
+          "name": "Dark Chocolate Mousse Cake",
+          "price": 1000,
+          "quantity": 2,
+          "image": "/cake/DarkChocolateMousseCake.webp",
+          "dbId": 11
+        }
+      ],
+      "totalAmount": 2000,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kerala",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-09T09:04:07.201Z",
+      "status": "Success"
+    },
+    {
+      "id": "df4f",
+      "userId": "2b89",
+      "items": [
+        {
+          "id": 1,
+          "name": "Straw Velvet Cake",
+          "price": 800,
+          "quantity": 1,
+          "image": "/cake/cake1.avif",
+          "dbId": 1
+        }
+      ],
+      "totalAmount": 800,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "MANHAR",
+        "mobile": "0974511840",
+        "house": "mlpm",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-09T09:09:30.008Z",
       "status": "Success"
     }
   ]

@@ -53,6 +53,9 @@ function Cart() {
     setCartItems(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
 
+    // Dispatch event to update navbar count
+    window.dispatchEvent(new Event("updateCart"));
+
     const item = updated.find((i) => i.id == productId);
 
     try {
@@ -83,6 +86,9 @@ function Cart() {
     setCartItems(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
 
+    // Dispatch event to update navbar count
+    window.dispatchEvent(new Event("updateCart"));
+    
     toast.success("Item removed!");
   };
 
@@ -275,6 +281,8 @@ function Cart() {
                   <span className="text-slate-600">Delivery</span>
                   <span className="text-lg font-semibold text-emerald-600">FREE</span>
                 </div>
+                
+                {/* Tax removed as requested */}
                 
                 <div className="flex justify-between items-center py-4 border-t border-slate-200">
                   <span className="text-xl font-bold text-slate-800">Total Amount</span>

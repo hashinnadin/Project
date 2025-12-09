@@ -67,7 +67,7 @@ function Navbar() {
       toast.error("Please login to view your cart");
       navigate("/login");
     } else {
-      navigate("/cart");
+      navigate("/cart"); // FIXED: Changed from /orders to /cart
     }
   };
 
@@ -113,7 +113,7 @@ function Navbar() {
               <img src={logo} className="w-10 h-10 rounded-lg object-cover" alt="BakeHub Logo" />
             </div>
             <span className="text-2xl font-bold text-slate-800 hidden sm:block">
-              Bake<span className="text-rose-500">Hub</span>
+              Cake<span className="text-rose-500">Hub</span>
             </span>
           </div>
 
