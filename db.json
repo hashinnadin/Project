@@ -47,6 +47,14 @@
       "password": "1234",
       "status": "active",
       "createdAt": "2025-12-09T09:07:15.319Z"
+    },
+    {
+      "id": "ccfc",
+      "username": "beckam",
+      "email": "beckam222@gmail.com",
+      "password": "beckam123",
+      "status": "blocked",
+      "createdAt": "2025-12-09T10:56:53.280Z"
     }
   ],
   "products": [
@@ -545,6 +553,34 @@
         "state": "kerala"
       },
       "date": "2025-12-09T09:09:30.008Z",
+      "status": "Success"
+    },
+    {
+      "id": "0b76",
+      "userId": "ccfc",
+      "items": [
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 1,
+          "image": "/cake/cake2.avif",
+          "dbId": 2
+        }
+      ],
+      "totalAmount": 750,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "beckam",
+        "mobile": "1234567890",
+        "house": "mlpm.andiviitile",
+        "street": "klpm",
+        "city": "england",
+        "pincode": "123456",
+        "state": "uk"
+      },
+      "date": "2025-12-09T10:59:40.415Z",
       "status": "Success"
     }
   ]
