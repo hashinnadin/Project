@@ -24,68 +24,99 @@ function Home() {
 
     fetchProducts();
   }, []);
+const addToCart = async (product) => {
+  if (!user) {
+    toast.error("Please login first");
+    navigate("/login");
+    return;
+  }
 
-  const addToCart = async (item) => {
-    const user = JSON.parse(localStorage.getItem("user"));
+  try {
+    // Load real user data from DB
+    const res = await fetch(`http://localhost:3002/users/${user.id}`);
+    const userData = await res.json();
 
-    if (!user) {
-      toast.error("Please login to add items to cart");
-      navigate("/login");
-      return;
+    let cart = userData.cart || [];
+
+    // Check if product already in cart
+    const existing = cart.find(
+      (item) => Number(item.productId) === Number(product.id)
+    );
+
+    if (existing) {
+      // Increase quantity
+      existing.quantity += 1;
+    } else {
+      // Add new product
+      cart.push({
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        quantity: 1,
+      });
     }
 
-    try {
-      const res = await axios.get(
-        `http://localhost:3002/cart?userId=${user.id}&productId=${item.id}`
-      );
+    // Update user cart in DB
+    await fetch(`http://localhost:3002/users/${user.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cart }),
+    });
 
-      if (res.data.length > 0) {
-        const existing = res.data[0];
+    toast.success("Added to cart!");
+    window.dispatchEvent(new Event("updateCart"));
+  } catch (error) {
+    toast.error("Could not update cart");
+  }
+};
 
-        await axios.patch(`http://localhost:3002/cart/${existing.id}`, {
-          quantity: existing.quantity + 1,
-        });
 
-        toast.success("Quantity updated in cart!");
-      } else {
-        await axios.post("http://localhost:3002/cart", {
-          userId: user.id,
-          productId: item.id,
-          productName: item.name,
-          price: item.price,
-          image: item.image,
-          quantity: 1,
-          date: new Date(),
-        });
+ const addToWishlist = async (item) => {
+  const user = JSON.parse(localStorage.getItem("user"));
 
-        toast.success(`${item.name} added to cart`);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to add to cart!");
-    }
-  };
+  if (!user) {
+    toast.error("Please login to add items to wishlist");
+    navigate("/login");
+    return;
+  }
 
-  const addToWishlist = (item) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      toast.error("Please login to add items to wishlist");
-      navigate("/login");
-      return;
-    }
+  try {
+    // 1. Get user record
+    const res = await axios.get(`http://localhost:3002/users/${user.id}`);
+    const userData = res.data;
 
-    const oldWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    const exists = oldWishlist.find((w) => w.id === item.id);
+    let wishlist = userData.wishlist || [];
+
+    // 2. Check exists
+    const exists = wishlist.find((w) => w.productId === item.id);
 
     if (exists) {
       toast.info("Already in wishlist");
       return;
     }
 
-    oldWishlist.push(item);
-    localStorage.setItem("wishlist", JSON.stringify(oldWishlist));
+    // 3. Add new item
+    wishlist.push({
+      productId: item.id,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+    });
+
+    // 4. Update DB
+    await axios.patch(`http://localhost:3002/users/${user.id}`, {
+      wishlist: wishlist,
+    });
+
     toast.success(`${item.name} added to wishlist`);
-  };
+    window.dispatchEvent(new Event("updateWishlist"));
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to update wishlist!");
+  }
+};
+
 
   if (loading) {
     return (
