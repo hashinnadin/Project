@@ -61,7 +61,6 @@ function Register() {
     }
 
     try {
-      // Check if email already exists
       const userCheck = await axios.get(
         `http://localhost:3002/users?email=${form.email}`
       );
@@ -72,12 +71,11 @@ function Register() {
         return;
       }
 
-      // Register new user with active status
       await axios.post("http://localhost:3002/users", {
         username: form.username,
         email: form.email,
         password: form.password,
-        status: "active", // Default status for new users
+        status: "active", 
         createdAt: new Date().toISOString()
       });
 
@@ -108,7 +106,6 @@ function Register() {
         </div>
 
         <div className="space-y-6">
-          {/* Username Field */}
           <div>
             <label className="block text-sm font-medium text-[#5D4737] mb-2">
               Username
@@ -127,7 +124,6 @@ function Register() {
             )}
           </div>
 
-          {/* Email Field */}
           <div>
             <label className="block text-sm font-medium text-[#5D4737] mb-2">
               Email Address
@@ -146,7 +142,6 @@ function Register() {
             )}
           </div>
 
-          {/* Password Field */}
           <div>
             <label className="block text-sm font-medium text-[#5D4737] mb-2">
               Password
@@ -167,7 +162,6 @@ function Register() {
             )}
           </div>
 
-          {/* Confirm Password Field */}
           <div>
             <label className="block text-sm font-medium text-[#5D4737] mb-2">
               Confirm Password
@@ -188,7 +182,6 @@ function Register() {
             )}
           </div>
 
-          {/* Password Requirements Hint */}
           <div className="text-xs text-[#8B7355] bg-[#F9F8F6] p-3 rounded-lg border border-[#EFE9E3]">
             <p className="font-medium mb-1">Password Requirements:</p>
             <ul className="list-disc pl-4 space-y-1">
@@ -198,7 +191,6 @@ function Register() {
             </ul>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}

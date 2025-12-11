@@ -18,7 +18,6 @@ function Cart() {
     loadCart();
   }, []);
 
-  // ---------------- LOAD CART FROM USER OBJECT ----------------
   const loadCart = async () => {
     try {
       const res = await fetch(`http://localhost:3002/users/${user.id}`);
@@ -42,80 +41,54 @@ function Cart() {
     }
   };
 
-  // ---------------- UPDATE QUANTITY ----------------
-const updateQuantity = async (productId, qty) => {
-  if (qty < 1) return;
+  const updateQuantity = async (productId, qty) => {
+    if (qty < 1) return;
 
-  try {
-    const res = await fetch(`http://localhost:3002/users/${user.id}`);
-    const userData = await res.json();
-
-    let cart = userData.cart || [];
-
-    cart = cart.map((item) =>
-      Number(item.productId) === Number(productId)
-        ? { ...item, quantity: qty }
-        : item
-    );
-
-    await fetch(`http://localhost:3002/users/${user.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart }),
-    });
-
-    setCartItems(
-      cart.map((item) => ({
-        id: Number(item.productId),
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        image: item.image,
-      }))
-    );
-
-  } catch (error) {
-    toast.error("Quantity update failed!");
-  }
-};
-
-
-  // ---------------- REMOVE ITEM ----------------
-  const removeItem = async (productId) => {
     try {
-      const res = await fetch(`http://localhost:3002/users/${user.id}`);
-      const userData = await res.json();
-
-      let cart = userData.cart || [];
-
-      cart = cart.filter(
-        (item) => Number(item.productId) !== Number(productId)
+      let updatedCart = cartItems.map((item) =>
+        Number(item.id) === Number(productId)
+          ? { ...item, quantity: qty }
+          : item
       );
 
       await fetch(`http://localhost:3002/users/${user.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart }),
+        body: JSON.stringify({ cart: updatedCart }),
       });
 
-      setCartItems(
-        cart.map((item) => ({
-          id: Number(item.productId),
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          image: item.image,
-        }))
+      setCartItems(updatedCart);
+
+      window.dispatchEvent(new Event("updateCart"));
+    } catch (error) {
+      toast.error("Quantity update failed!");
+    }
+  };
+
+  const removeItem = async (productId) => {
+    try {
+      let updatedCart = cartItems.filter(
+        (item) => Number(item.id) !== Number(productId)
       );
 
-      toast.success("Item removed!");
+      await fetch(`http://localhost:3002/users/${user.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart: updatedCart }),
+      });
+
+      setCartItems(updatedCart);
       window.dispatchEvent(new Event("updateCart"));
+      toast.success("Item removed!");
+
+      if (updatedCart.length === 0) {
+        navigate("/cart");
+      }
     } catch (error) {
       toast.error("Failed to remove item!");
     }
   };
 
-  // ---------------- CHECKOUT ----------------
   const handleCheckout = () => {
     if (cartItems.length === 0) {
       toast.error("Your cart is empty!");
@@ -124,13 +97,11 @@ const updateQuantity = async (productId, qty) => {
     navigate("/payment");
   };
 
-  // ---------------- CALCULATIONS ----------------
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
 
-  // ---------------- LOADING ----------------
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -139,7 +110,6 @@ const updateQuantity = async (productId, qty) => {
     );
   }
 
-  // ---------------- EMPTY CART ----------------
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
@@ -155,7 +125,6 @@ const updateQuantity = async (productId, qty) => {
     );
   }
 
-  // ---------------- MAIN UI ----------------
   return (
     <div className="min-h-screen p-4">
       <div className="max-w-5xl mx-auto">

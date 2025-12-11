@@ -9,6 +9,8 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,6 +26,7 @@ function Home() {
 
     fetchProducts();
   }, []);
+
 const addToCart = async (product) => {
   if (!user) {
     toast.error("Please login first");
@@ -32,22 +35,18 @@ const addToCart = async (product) => {
   }
 
   try {
-    // Load real user data from DB
     const res = await fetch(`http://localhost:3002/users/${user.id}`);
     const userData = await res.json();
 
     let cart = userData.cart || [];
 
-    // Check if product already in cart
     const existing = cart.find(
       (item) => Number(item.productId) === Number(product.id)
     );
 
     if (existing) {
-      // Increase quantity
       existing.quantity += 1;
     } else {
-      // Add new product
       cart.push({
         productId: product.id,
         name: product.name,
@@ -57,7 +56,6 @@ const addToCart = async (product) => {
       });
     }
 
-    // Update user cart in DB
     await fetch(`http://localhost:3002/users/${user.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -72,6 +70,7 @@ const addToCart = async (product) => {
 };
 
 
+
  const addToWishlist = async (item) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -82,13 +81,11 @@ const addToCart = async (product) => {
   }
 
   try {
-    // 1. Get user record
     const res = await axios.get(`http://localhost:3002/users/${user.id}`);
     const userData = res.data;
 
     let wishlist = userData.wishlist || [];
 
-    // 2. Check exists
     const exists = wishlist.find((w) => w.productId === item.id);
 
     if (exists) {
@@ -96,7 +93,6 @@ const addToCart = async (product) => {
       return;
     }
 
-    // 3. Add new item
     wishlist.push({
       productId: item.id,
       name: item.name,
@@ -104,7 +100,6 @@ const addToCart = async (product) => {
       image: item.image,
     });
 
-    // 4. Update DB
     await axios.patch(`http://localhost:3002/users/${user.id}`, {
       wishlist: wishlist,
     });
@@ -132,12 +127,10 @@ const addToCart = async (product) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 text-slate-800">
 
-      {/* Hero Section */}
       <div 
         className="w-full h-[280px] md:h-[400px] bg-gradient-to-br from-rose-500 via-pink-500 to-purple-600 
         flex items-center justify-center text-center px-6 relative overflow-hidden"
       >
-        {/* Background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-24 h-24 rounded-full bg-white"></div>
           <div className="absolute bottom-10 right-10 w-32 h-32 rounded-full bg-white"></div>
@@ -174,11 +167,9 @@ const addToCart = async (product) => {
         </div>
       </div>
 
-      {/* Featured Cakes Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-7xl">
           
-          {/* Section Header */}
           <div className="text-center mb-16">
             <div className="inline-block mb-4">
               <span className="text-rose-500 font-semibold text-sm uppercase tracking-wider">
@@ -193,7 +184,6 @@ const addToCart = async (product) => {
             </p>
           </div>
 
-          {/* Products Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((cake) => (
               <div
@@ -201,7 +191,6 @@ const addToCart = async (product) => {
                 className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl 
                 transition-all duration-500 hover:-translate-y-2 border border-slate-100"
               >
-                {/* Image Container */}
                 <div className="relative overflow-hidden h-64">
                   <img
                     src={cake.image}
@@ -225,7 +214,6 @@ const addToCart = async (product) => {
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-xl font-bold text-slate-800 group-hover:text-rose-600 transition-colors">
@@ -255,7 +243,6 @@ const addToCart = async (product) => {
             ))}
           </div>
 
-          {/* View All Button */}
           <div className="text-center mt-12">
             <button
               onClick={() => navigate('/products')}
@@ -274,7 +261,6 @@ const addToCart = async (product) => {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-16 bg-gradient-to-r from-slate-50 to-blue-50 border-t border-slate-200">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

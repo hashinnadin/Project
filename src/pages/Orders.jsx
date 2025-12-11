@@ -25,7 +25,6 @@ function Orders() {
         );
         const data = await res.json();
         
-        // Filter out invalid orders and sort by date (newest first)
         const validOrders = data.filter(order => 
           order && order.id && order.userId === user.id
         ).sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
@@ -134,7 +133,6 @@ function Orders() {
               <div className="p-6">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                   <div className="flex-1 space-y-4">
-                    {/* Order Header */}
                     <div className="flex flex-wrap items-center gap-3">
                       <span className={`px-3 py-1.5 rounded-full text-sm font-medium border flex items-center gap-2 ${getStatusColor(order.status)}`}>
                         {getStatusIcon(order.status)}
@@ -145,7 +143,6 @@ function Orders() {
                       </span>
                     </div>
 
-                    {/* Order Details */}
                     <div className="space-y-2">
                       <p className="text-slate-600">
                         <span className="font-medium">Placed on:</span> {formatDate(order.date)}
@@ -166,7 +163,6 @@ function Orders() {
                     </div>
                   </div>
 
-                  {/* Order Total & Actions */}
                   <div className="flex flex-col items-end gap-4">
                     <p className="text-2xl font-bold text-emerald-600">
                       ₹{order.totalAmount?.toLocaleString("en-IN") || "0"}
@@ -182,7 +178,6 @@ function Orders() {
                   </div>
                 </div>
 
-                {/* Items Preview */}
                 {order.items && order.items.length > 0 && (
                   <div className="mt-6 pt-6 border-t border-slate-100">
                     <p className="text-slate-600 font-medium mb-3">Items in this order:</p>

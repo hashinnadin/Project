@@ -8,7 +8,6 @@ function Wishlist() {
   const [loading, setLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // Check login
   useEffect(() => {
     if (!user) {
       navigate("/login");
@@ -17,7 +16,6 @@ function Wishlist() {
     loadWishlist();
   }, []);
 
-  // ---------------- LOAD WISHLIST FROM USER OBJECT ----------------
   const loadWishlist = async () => {
     try {
       const res = await fetch(`http://localhost:3002/users/${user.id}`);
@@ -40,7 +38,6 @@ function Wishlist() {
     }
   };
 
-  // ---------------- REMOVE FROM WISHLIST ----------------
   const removeFromWishlist = async (itemId) => {
     try {
       const res = await fetch(`http://localhost:3002/users/${user.id}`);
@@ -73,7 +70,6 @@ function Wishlist() {
     }
   };
 
-  // ---------------- ADD TO CART ----------------
   const addToCart = async (item) => {
     try {
       const res = await fetch(`http://localhost:3002/users/${user.id}`);
@@ -110,7 +106,6 @@ function Wishlist() {
     }
   };
 
-  // ---------------- MOVE ALL TO CART ----------------
   const moveAllToCart = async () => {
     try {
       const res = await fetch(`http://localhost:3002/users/${user.id}`);
@@ -119,7 +114,6 @@ function Wishlist() {
       let cart = userData.cart || [];
       let wishlist = userData.wishlist || [];
 
-      // Move wishlist → cart
       wishlist.forEach((item) => {
         const existing = cart.find(
           (c) => Number(c.productId) === Number(item.productId)
@@ -132,10 +126,8 @@ function Wishlist() {
         }
       });
 
-      // Clear wishlist
       wishlist = [];
 
-      // Update DB
       await fetch(`http://localhost:3002/users/${user.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -151,7 +143,6 @@ function Wishlist() {
     }
   };
 
-  // ---------------- LOADING ----------------
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -160,7 +151,6 @@ function Wishlist() {
     );
   }
 
-  // ---------------- EMPTY WISHLIST ----------------
   if (wishlistItems.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
@@ -175,7 +165,6 @@ function Wishlist() {
     );
   }
 
-  // ---------------- MAIN WISHLIST UI ----------------
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-6xl mx-auto">

@@ -46,7 +46,6 @@ function Login() {
     const ADMIN_EMAIL = "admin@gmail.com";
     const ADMIN_PASSWORD = "admin123";
 
-    // Admin login
     if (form.email === ADMIN_EMAIL && form.password === ADMIN_PASSWORD) {
       localStorage.setItem(
         "admin",
@@ -62,7 +61,6 @@ function Login() {
     }
 
     try {
-      // Check for blocked users
       const blockedCheck = await axios.get(
         `http://localhost:3002/users?email=${form.email}&status=blocked`
       );
@@ -73,12 +71,10 @@ function Login() {
         return;
       }
 
-      // Check for active users
       const res = await axios.get(
         `http://localhost:3002/users?email=${form.email}&password=${form.password}&status=active`
       );
 
-      // If no active user found, try without status filter (for backward compatibility)
       if (res.data.length === 0) {
         const fallbackRes = await axios.get(
           `http://localhost:3002/users?email=${form.email}&password=${form.password}`
@@ -90,11 +86,9 @@ function Login() {
           return;
         }
         
-        // If user exists but doesn't have status field, save as active user
         const userData = { ...fallbackRes.data[0], status: "active" };
         localStorage.setItem("user", JSON.stringify(userData));
         
-        // Update user status in database (optional)
         try {
           await axios.patch(`http://localhost:3002/users/${userData.id}`, {
             status: "active"
@@ -109,10 +103,8 @@ function Login() {
         return;
       }
 
-      // Save active user session
       localStorage.setItem("user", JSON.stringify(res.data[0]));
       
-      // Clear any existing admin session
       localStorage.removeItem("admin");
       
       toast.success("Login Successful!");
@@ -193,7 +185,6 @@ function Login() {
             )}
           </button>
 
-          {/* Admin login hint (remove in production) */}
           <div className="text-center text-xs text-[#8B7355] bg-[#F9F8F6] p-3 rounded-lg border border-[#EFE9E3]">
             <p className="font-medium mb-1">Admin Login:</p>
             <p>Email: admin@gmail.com</p>

@@ -33,24 +33,20 @@ function OrderDetails() {
         
         const data = await res.json();
 
-        // Validate order data
         if (!data) {
           throw new Error("Order data is empty");
         }
 
-        // Check if order belongs to user
         if (data.userId && data.userId !== user.id) {
           toast.error("You are not allowed to view this order");
           navigate("/orders");
           return;
         }
 
-        // Ensure items array exists
         if (!data.items) {
           data.items = [];
         }
 
-        // Ensure address object exists
         if (!data.address) {
           data.address = {
             fullName: "Not available",
@@ -160,7 +156,6 @@ function OrderDetails() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-blue-50 p-4 md:p-6">
       <div className="container mx-auto max-w-7xl">
         
-        {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => navigate("/orders")}
@@ -202,7 +197,6 @@ function OrderDetails() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Order Items */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 mb-6">
               <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-3">
@@ -261,7 +255,6 @@ function OrderDetails() {
               )}
             </div>
 
-            {/* Order Summary */}
             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
               <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
@@ -292,9 +285,7 @@ function OrderDetails() {
             </div>
           </div>
 
-          {/* Customer & Payment Info */}
           <div className="space-y-6">
-            {/* Delivery Address */}
             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
               <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
@@ -321,7 +312,6 @@ function OrderDetails() {
               </div>
             </div>
 
-            {/* Payment Details */}
             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
               <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
@@ -349,7 +339,6 @@ function OrderDetails() {
               </div>
             </div>
 
-            {/* Order Information */}
             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
               <h3 className="font-bold text-slate-800 mb-4">Order Information</h3>
               <div className="space-y-3">

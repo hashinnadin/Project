@@ -8,6 +8,7 @@ import {
  FaTachometerAlt,
 } from "react-icons/fa";
 
+
 function Dashboard() {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -170,7 +171,6 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F9F8F6] to-[#EFE9E3]">
-      {/* Sidebar */}
       <aside className={`
         fixed top-0 left-0 h-screen bg-white border-r border-[#D9CFC7] 
         shadow-xl z-40 transition-all duration-300

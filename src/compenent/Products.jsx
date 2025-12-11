@@ -15,7 +15,6 @@ function Product() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // Load products + read search param
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const searchQuery = params.get("search") || "";
@@ -24,7 +23,6 @@ function Product() {
     fetchProducts(searchQuery);
   }, [location.search]);
 
-  // Fetch products from backend
   const fetchProducts = async (searchQuery) => {
     try {
       const response = await fetch("http://localhost:3002/products");
@@ -39,7 +37,6 @@ function Product() {
     }
   };
 
-  // Filtering & sorting
   const filterAndSortProducts = (list, term, sortOption) => {
     let filtered = [...list];
 
@@ -80,125 +77,109 @@ function Product() {
     filterAndSortProducts(products, searchTerm, value);
   };
 
-const addToCart = async (item) => {
-  if (!user) {
-    toast.error("Please login");
-    return navigate("/login");
-  }
+  const addToCart = async (item) => {
+    if (!user) {
+      toast.error("Please login");
+      return navigate("/login");
+    }
 
-  try {
-    // 1. Fetch user from DB
-    const res = await fetch(`http://localhost:3002/users/${user.id}`);
-    const userData = await res.json();
+    try {
+      const res = await fetch(`http://localhost:3002/users/${user.id}`);
+      const userData = await res.json();
 
-    let cart = userData.cart || [];
+      let cart = userData.cart || [];
+      const existing = cart.find((c) => c.productId === item.id);
 
-    // 2. Check if product exists
-    const existing = cart.find(c => c.productId === item.id);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          productId: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: 1,
+        });
+      }
 
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({
+      await fetch(`http://localhost:3002/users/${user.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart }),
+      });
+
+      toast.success(`${item.name} added to cart`);
+      window.dispatchEvent(new Event("updateCart"));
+    } catch (err) {
+      toast.error("Failed to update cart!");
+    }
+  };
+
+  const addToWishlist = async (item) => {
+    if (!user) {
+      toast.error("Please login");
+      return navigate("/login");
+    }
+
+    try {
+      const res = await fetch(`http://localhost:3002/users/${user.id}`);
+      const userData = await res.json();
+
+      let wishlist = userData.wishlist || [];
+      const exists = wishlist.find((w) => w.productId === item.id);
+
+      if (exists) {
+        toast.info("Already in wishlist");
+        return;
+      }
+
+      wishlist.push({
         productId: item.id,
         name: item.name,
         price: item.price,
         image: item.image,
-        quantity: 1
       });
+
+      await fetch(`http://localhost:3002/users/${user.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wishlist }),
+      });
+
+      toast.success(`${item.name} added to wishlist`);
+      window.dispatchEvent(new Event("updateWishlist"));
+    } catch (err) {
+      toast.error("Failed to update wishlist!");
     }
+  };
 
-    // 3. Update user object in DB
-    await fetch(`http://localhost:3002/users/${user.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart })
-    });
-
-    toast.success(`${item.name} added to cart`);
-
-    window.dispatchEvent(new Event("updateCart"));
-
-  } catch (err) {
-    console.log(err);
-    toast.error("Failed to update cart!");
-  }
-};
-
-
-  // ------------------ CLEAN ADD-TO-WISHLIST (NO LOCAL STORAGE) ------------------
-  const addToWishlist = async (item) => {
-  if (!user) {
-    toast.error("Please login");
-    return navigate("/login");
-  }
-
-  try {
-    // 1. Get user record
-    const res = await fetch(`http://localhost:3002/users/${user.id}`);
-    const userData = await res.json();
-
-    let wishlist = userData.wishlist || [];
-
-    // 2. Check exist
-    const exists = wishlist.find(w => w.productId === item.id);
-
-    if (exists) {
-      toast.info("Already in wishlist");
-      return;
-    }
-
-    wishlist.push({
-      productId: item.id,
-      name: item.name,
-      price: item.price,
-      image: item.image
-    });
-
-    // 3. PATCH updated wishlist
-    await fetch(`http://localhost:3002/users/${user.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ wishlist })
-    });
-
-    toast.success(`${item.name} added to wishlist`);
-    window.dispatchEvent(new Event("updateWishlist"));
-
-  } catch (err) {
-    toast.error("Failed to update wishlist!");
-  }
-};
-
-  // ------------------ LOADER ------------------
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="flex flex-col items-center">
           <div className="w-16 h-16 border-4 border-rose-200 border-t-rose-500 rounded-full animate-spin mb-4"></div>
-          <p className="text-rose-600 font-medium text-lg">Loading our collection...</p>
+          <p className="text-rose-600 font-medium text-lg">
+            Loading our collection...
+          </p>
         </div>
       </div>
     );
   }
 
-  // ------------------ UI ------------------
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-blue-50">
-
-      {/* Header Section */}
       <div className="bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 py-12 px-4 text-center">
-        <h1 className="text-5xl font-bold text-white mb-3">Our Delicious Collection</h1>
+        <h1 className="text-5xl font-bold text-white mb-3">
+          Our Delicious Collection
+        </h1>
         <p className="text-white text-lg opacity-90 max-w-2xl mx-auto">
-          Discover handcrafted cakes made with love, premium ingredients, and passion.
+          Discover handcrafted cakes made with love, premium ingredients, and
+          passion.
         </p>
       </div>
 
-      {/* Search & Sort */}
       <div className="container mx-auto max-w-7xl p-6 bg-white mt-8 rounded-2xl shadow-lg">
         <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
-
-          {/* Search */}
           <input
             type="text"
             value={searchTerm}
@@ -208,7 +189,6 @@ const addToCart = async (item) => {
             focus:border-rose-400 focus:ring-2 focus:ring-rose-200 outline-none"
           />
 
-          {/* Sort */}
           <select
             value={sortBy}
             onChange={handleSort}
@@ -221,24 +201,25 @@ const addToCart = async (item) => {
           </select>
         </div>
 
-        {/* Search result count */}
         {searchTerm && (
           <p className="mt-4 text-center text-slate-600">
-            Found <span className="font-bold text-rose-600">{filteredProducts.length}</span> results for "{searchTerm}"
+            Found{" "}
+            <span className="font-bold text-rose-600">
+              {filteredProducts.length}
+            </span>{" "}
+            results for "{searchTerm}"
           </p>
         )}
       </div>
 
-      {/* Product Grid */}
       <div className="container mx-auto max-w-7xl p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-
         {filteredProducts.map((item) => (
           <div
             key={item.id}
             className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
           >
-            {/* Image */}
-            <div className="relative h-64 overflow-hidden cursor-pointer"
+            <div
+              className="relative h-64 overflow-hidden cursor-pointer"
               onClick={() => navigate(`/product/${item.id}`)}
             >
               <img
@@ -250,7 +231,6 @@ const addToCart = async (item) => {
                 {item.category}
               </span>
 
-              {/* Wishlist */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -262,7 +242,6 @@ const addToCart = async (item) => {
               </button>
             </div>
 
-            {/* Content */}
             <div className="p-6">
               <h3
                 className="text-xl font-bold mb-3 cursor-pointer group-hover:text-rose-600"
@@ -271,7 +250,13 @@ const addToCart = async (item) => {
                 {item.name}
               </h3>
 
-              <p className="text-slate-600 text-sm mb-4 line-clamp-2">{item.description}</p>
+              <p className="text-slate-600 text-sm mb-2 line-clamp-2">
+                {item.description}
+              </p>
+
+              <p className="text-lg font-semibold text-rose-600 mb-4">
+                ₹ {item.price}
+              </p>
 
               <button
                 onClick={() => addToCart(item)}
@@ -284,7 +269,6 @@ const addToCart = async (item) => {
         ))}
       </div>
 
-      {/* Count */}
       {filteredProducts.length > 0 && (
         <p className="text-center mt-10 text-slate-600">
           Showing {filteredProducts.length} delicious cakes

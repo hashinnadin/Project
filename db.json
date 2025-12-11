@@ -13,50 +13,12 @@
       "email": "fasalsabah07@gmail.com",
       "password": "1234",
       "status": "active",
-      "wishlist": [],
-      "cart": [
-        {
-          "productId": "3",
-          "name": "Black Forest Cake",
-          "price": 900,
-          "image": "/cake/cake3.avif",
-          "quantity": 9
-        },
-        {
-          "productId": "1",
-          "name": "Straw Velvet Cake",
-          "price": 800,
-          "image": "/cake/cake1.avif",
-          "quantity": 1
-        },
-        {
-          "productId": "4",
-          "name": "Party Mix Cake",
-          "price": 900,
-          "image": "/cake/cake4.avif",
-          "quantity": 1
-        }
-      ]
-    },
-    {
-      "id": "88b0",
-      "username": "hashin",
-      "email": "aaa@gmail.com",
-      "password": "abcd",
-      "status": "active",
-      "createdAt": "2025-12-10T06:51:45.083Z",
       "wishlist": [
         {
           "productId": "2",
           "name": "Choco Cream Cake",
           "price": 750,
           "image": "/cake/cake2.avif"
-        },
-        {
-          "productId": "1",
-          "name": "Straw Velvet Cake",
-          "price": 800,
-          "image": "/cake/cake1.avif"
         },
         {
           "productId": "3",
@@ -73,11 +35,77 @@
       ],
       "cart": [
         {
+          "productId": "2",
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "image": "/cake/cake2.avif",
+          "quantity": 4
+        },
+        {
+          "productId": "14",
+          "name": "Eggless Dutch Truffle Cake 1 KG",
+          "price": 1200,
+          "image": "/cake/EgglessDutchTruffleCakeonekg.webp",
+          "quantity": 1
+        },
+        {
+          "productId": "1765347746304",
+          "name": "Chocolate Cake",
+          "price": 600,
+          "image": "https://theovenchef.com/wp-content/uploads/2023/08/WhatsApp-Image-2023-11-01-at-5.39.28-PM-1-scaled-e1698841246352.jpeg",
+          "quantity": 1
+        }
+      ],
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "mlpm.andiviitile",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      }
+    },
+    {
+      "id": "88b0",
+      "username": "hashin",
+      "email": "aaa@gmail.com",
+      "password": "abcd",
+      "status": "active",
+      "createdAt": "2025-12-10T06:51:45.083Z",
+      "wishlist": [],
+      "cart": [],
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      }
+    },
+    {
+      "id": "db9e",
+      "username": "sanu",
+      "email": "sanu@gmail.com",
+      "password": "1234",
+      "status": "active",
+      "createdAt": "2025-12-11T07:55:36.301Z",
+      "cart": [
+        {
+          "productId": "3",
+          "name": "Black Forest Cake",
+          "price": 900,
+          "image": "/cake/cake3.avif",
+          "quantity": 1
+        },
+        {
           "productId": "1",
           "name": "Straw Velvet Cake",
           "price": 800,
           "image": "/cake/cake1.avif",
-          "quantity": 3
+          "quantity": 1
         }
       ],
       "address": {
@@ -271,6 +299,15 @@
       "description": "a sweet, baked dessert made from flour, sugar, eggs, and fat",
       "image": "https://theovenchef.com/wp-content/uploads/2023/08/WhatsApp-Image-2023-11-01-at-5.39.28-PM-1-scaled-e1698841246352.jpeg",
       "rating": 4.5
+    },
+    {
+      "id": "1765358023709",
+      "name": "Peanut Cake",
+      "price": 1200,
+      "category": "Premium",
+      "description": "English Pound CakeA cake is a sweet, baked dessert made from flour, sugar, eggs, and fat,",
+      "image": "https://theoven.in/wp-content/uploads/2023/02/Choco-Vanilla.png",
+      "rating": 4.5
     }
   ],
   "orders": [
@@ -333,6 +370,244 @@
         "state": "kerala"
       },
       "date": "2025-12-10T08:10:52.789Z",
+      "status": "Success"
+    },
+    {
+      "id": "90d3",
+      "userId": "88b0",
+      "items": [
+        {
+          "id": 1,
+          "name": "Straw Velvet Cake",
+          "price": 800,
+          "quantity": 4,
+          "image": "/cake/cake1.avif"
+        },
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 1,
+          "image": "/cake/cake2.avif"
+        }
+      ],
+      "totalAmount": 3950,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-10T08:16:50.441Z",
+      "status": "Success"
+    },
+    {
+      "id": "a543",
+      "userId": "88b0",
+      "items": [
+        {
+          "id": 1,
+          "name": "Straw Velvet Cake",
+          "price": 800,
+          "quantity": 4,
+          "image": "/cake/cake1.avif"
+        },
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 1,
+          "image": "/cake/cake2.avif"
+        }
+      ],
+      "totalAmount": 3950,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-10T08:51:09.015Z",
+      "status": "Success"
+    },
+    {
+      "id": "84bf",
+      "userId": "88b0",
+      "items": [
+        {
+          "id": 1,
+          "name": "Straw Velvet Cake",
+          "price": 800,
+          "quantity": 4,
+          "image": "/cake/cake1.avif"
+        },
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 1,
+          "image": "/cake/cake2.avif"
+        }
+      ],
+      "totalAmount": 3950,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-10T08:56:59.699Z",
+      "status": "Success"
+    },
+    {
+      "id": "a6b8",
+      "userId": "88b0",
+      "items": [
+        {
+          "id": 1,
+          "name": "Straw Velvet Cake",
+          "price": 800,
+          "quantity": 4,
+          "image": "/cake/cake1.avif"
+        },
+        {
+          "id": 2,
+          "name": "Choco Cream Cake",
+          "price": 750,
+          "quantity": 2,
+          "image": "/cake/cake2.avif"
+        }
+      ],
+      "totalAmount": 4700,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-10T09:07:59.125Z",
+      "status": "Success"
+    },
+    {
+      "id": "4b00",
+      "userId": "76ec",
+      "items": [
+        {
+          "id": 3,
+          "name": "Black Forest Cake",
+          "price": 900,
+          "quantity": 9,
+          "image": "/cake/cake3.avif"
+        },
+        {
+          "id": 1,
+          "name": "Straw Velvet Cake",
+          "price": 800,
+          "quantity": 1,
+          "image": "/cake/cake1.avif"
+        },
+        {
+          "id": 4,
+          "name": "Party Mix Cake",
+          "price": 900,
+          "quantity": 1,
+          "image": "/cake/cake4.avif"
+        }
+      ],
+      "totalAmount": 9800,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "mlpm.andiviitile",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-10T10:30:24.998Z",
+      "status": "Success"
+    },
+    {
+      "id": "114a",
+      "userId": "76ec",
+      "items": [
+        {
+          "id": 5,
+          "name": "Creamy Delight",
+          "price": 500,
+          "quantity": 1,
+          "image": "/cake/cake5.webp"
+        }
+      ],
+      "totalAmount": 500,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "mlpm.andiviitile",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-10T10:33:27.702Z",
+      "status": "Success"
+    },
+    {
+      "id": "3180",
+      "userId": "db9e",
+      "items": [
+        {
+          "id": 15,
+          "name": "Fresh Fruit Cream Cake",
+          "price": 850,
+          "quantity": 1,
+          "image": "/cake/FreshFruit_CreamCake.webp"
+        },
+        {
+          "id": 1765347746304,
+          "name": "Chocolate Cake",
+          "price": 600,
+          "quantity": 1,
+          "image": "https://theovenchef.com/wp-content/uploads/2023/08/WhatsApp-Image-2023-11-01-at-5.39.28-PM-1-scaled-e1698841246352.jpeg"
+        }
+      ],
+      "totalAmount": 1450,
+      "paymentMethod": "upi",
+      "paymentStatus": "completed",
+      "address": {
+        "fullName": "hashin",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      },
+      "date": "2025-12-11T07:57:03.175Z",
       "status": "Success"
     }
   ]
