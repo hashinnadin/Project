@@ -96,14 +96,12 @@ function AdminOrders() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F9F8F6] to-[#EFE9E3]">
-      {/* Sidebar */}
       <aside className={`
         fixed top-0 left-0 h-screen bg-white border-r border-[#D9CFC7] 
         shadow-xl z-40 transition-all duration-300
         ${isSidebarOpen ? 'w-64' : 'w-20'}
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Logo & Header */}
         <div className="p-6 border-b border-[#EFE9E3]">
           <div className="flex items-center justify-between">
             {isSidebarOpen ? (
@@ -130,7 +128,6 @@ function AdminOrders() {
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-180px)]">
           {menuItems.map((item) => (
             <button

@@ -62,7 +62,6 @@ function AdminNavbar() {
 
   return (
     <>
-      {/* Mobile Menu Button (only for small screens) */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 text-2xl text-[#5D4737] bg-white p-2 rounded-lg shadow-md"
         onClick={() => setOpen(!open)}
@@ -70,14 +69,12 @@ function AdminNavbar() {
         {open ? <FaTimes /> : <FaBars />}
       </button>
 
-      {/* Sidebar for Desktop & Mobile */}
       <aside className={`
         fixed top-0 left-0 h-screen bg-white border-r border-[#D9CFC7] 
         shadow-lg z-40 transition-all duration-300
         ${isCollapsed ? 'w-20' : 'w-64'}
         ${open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Logo & Toggle */}
         <div className="p-6 border-b border-[#EFE9E3]">
           <div className="flex items-center justify-between">
             <div 
@@ -95,7 +92,6 @@ function AdminNavbar() {
               </div>
             </div>
             
-            {/* Collapse Toggle (Desktop only) */}
             <button
               className="hidden lg:block text-[#C9B59C] hover:text-[#B8A48B] transition-colors"
               onClick={() => setIsCollapsed(!isCollapsed)}
@@ -105,7 +101,6 @@ function AdminNavbar() {
           </div>
         </div>
 
-        {/* Navigation Menu */}
         <nav className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-120px)]">
           {mainMenuItems.map((item) => (
             <div key={item.path}>
@@ -129,7 +124,6 @@ function AdminNavbar() {
                 </div>
               </button>
 
-              {/* Product Sub-menu (only visible when Products is active) */}
               {item.path === "/admin/products" && isActive(item.path) && !isCollapsed && (
                 <div className="ml-10 mt-2 space-y-1 border-l-2 border-[#EFE9E3] pl-4">
                   {productSubMenu.map((subItem) => (
@@ -150,7 +144,6 @@ function AdminNavbar() {
             </div>
           ))}
 
-          {/* Logout Button */}
           <div className={`pt-6 border-t border-[#EFE9E3] ${isCollapsed ? 'px-3' : 'px-4'}`}>
             <button
               onClick={() => {
@@ -167,7 +160,6 @@ function AdminNavbar() {
           </div>
         </nav>
 
-        {/* User Info (at bottom) */}
         <div className={`absolute bottom-0 left-0 right-0 p-4 border-t border-[#EFE9E3] bg-white ${isCollapsed ? 'px-3' : 'px-4'}`}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#C9B59C] to-[#B8A48B] flex items-center justify-center text-white font-bold">
@@ -181,7 +173,6 @@ function AdminNavbar() {
         </div>
       </aside>
 
-      {/* Overlay for mobile */}
       {open && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
@@ -189,12 +180,10 @@ function AdminNavbar() {
         />
       )}
 
-      {/* Main Content Area (adjusted for sidebar) */}
       <main className={`
         min-h-screen bg-gradient-to-br from-[#F9F8F6] to-[#EFE9E3] transition-all duration-300
         ${isCollapsed ? 'lg:ml-20' : 'lg:ml-64'}
       `}>
-        {/* This is where your page content will go */}
       </main>
     </>
   );

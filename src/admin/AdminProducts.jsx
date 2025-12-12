@@ -147,7 +147,6 @@ function AdminProducts() {
             </button>
           ))}
 
-          {/* Quick Actions */}
           {isSidebarOpen && (
             <div className="mt-6 pt-6 border-t border-[#EFE9E3]">
               <h3 className="text-sm font-semibold text-[#8B7355] mb-3 px-3">Quick Actions</h3>

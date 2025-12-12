@@ -95,14 +95,12 @@ function AdminAddProducts() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F9F8F6] to-[#EFE9E3]">
-      {/* Sidebar */}
       <aside className={`
         fixed top-0 left-0 h-screen bg-white border-r border-[#D9CFC7] 
         shadow-xl z-40 transition-all duration-300
         ${isSidebarOpen ? 'w-64' : 'w-20'}
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Logo & Header */}
         <div className="p-6 border-b border-[#EFE9E3]">
           <div className="flex items-center justify-between">
             {isSidebarOpen ? (
@@ -129,7 +127,6 @@ function AdminAddProducts() {
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-180px)]">
           {menuItems.map((item) => (
             <button
@@ -151,7 +148,6 @@ function AdminAddProducts() {
             </button>
           ))}
 
-          {/* Quick Actions */}
           {isSidebarOpen && (
             <div className="mt-6 pt-6 border-t border-[#EFE9E3]">
               <h3 className="text-sm font-semibold text-[#8B7355] mb-3 px-3">Quick Actions</h3>
@@ -169,7 +165,6 @@ function AdminAddProducts() {
           )}
         </nav>
 
-        {/* Logout */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#EFE9E3] bg-white">
           <button
             onClick={logoutAdmin}
@@ -181,7 +176,6 @@ function AdminAddProducts() {
         </div>
       </aside>
 
-      {/* Mobile Menu Button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 text-2xl text-[#5D4737] bg-white p-2 rounded-lg shadow-lg"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -189,21 +183,18 @@ function AdminAddProducts() {
         {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
       </button>
 
-      {/* Overlay for mobile */}
-      {isMobileMenuOpen && (
+       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
-      {/* Main Content */}
       <main className={`
         transition-all duration-300 min-h-screen
         ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}
       `}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Header */}
           <div className="mb-8">
             <button
               onClick={() => navigate("/admin/products")}
@@ -218,11 +209,9 @@ function AdminAddProducts() {
             </div>
           </div>
 
-          {/* Form */}
           <div className="bg-white rounded-xl shadow-sm border border-[#D9CFC7] overflow-hidden">
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Name */}
                 <div>
                   <label className="block text-sm font-medium text-[#5D4737] mb-2">
                     Product Name *
@@ -238,7 +227,6 @@ function AdminAddProducts() {
                   {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                 </div>
 
-                {/* Price */}
                 <div>
                   <label className="block text-sm font-medium text-[#5D4737] mb-2">
                     Price (₹) *
@@ -254,7 +242,6 @@ function AdminAddProducts() {
                   {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
                 </div>
 
-                {/* Category */}
                 <div>
                   <label className="block text-sm font-medium text-[#5D4737] mb-2">
                     Category *
@@ -270,7 +257,6 @@ function AdminAddProducts() {
                   {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
                 </div>
 
-                {/* Image URL */}
                 <div>
                   <label className="block text-sm font-medium text-[#5D4737] mb-2">
                     Image URL *
@@ -287,7 +273,6 @@ function AdminAddProducts() {
                 </div>
               </div>
 
-              {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-[#5D4737] mb-2">
                   Description *
@@ -303,7 +288,6 @@ function AdminAddProducts() {
                 {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
               </div>
 
-              {/* Button */}
               <div className="flex gap-4 pt-4">
                 <button
                   type="button"

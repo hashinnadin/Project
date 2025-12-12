@@ -185,11 +185,7 @@ function Login() {
             )}
           </button>
 
-          <div className="text-center text-xs text-[#8B7355] bg-[#F9F8F6] p-3 rounded-lg border border-[#EFE9E3]">
-            <p className="font-medium mb-1">Admin Login:</p>
-            <p>Email: admin@gmail.com</p>
-            <p>Password: admin123</p>
-          </div>
+         
         </div>
 
         <div className="mt-6 pt-6 border-t border-[#EFE9E3]">

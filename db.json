@@ -33,29 +33,7 @@
           "image": "/cake/cake6.jpg"
         }
       ],
-      "cart": [
-        {
-          "productId": "2",
-          "name": "Choco Cream Cake",
-          "price": 750,
-          "image": "/cake/cake2.avif",
-          "quantity": 4
-        },
-        {
-          "productId": "14",
-          "name": "Eggless Dutch Truffle Cake 1 KG",
-          "price": 1200,
-          "image": "/cake/EgglessDutchTruffleCakeonekg.webp",
-          "quantity": 1
-        },
-        {
-          "productId": "1765347746304",
-          "name": "Chocolate Cake",
-          "price": 600,
-          "image": "https://theovenchef.com/wp-content/uploads/2023/08/WhatsApp-Image-2023-11-01-at-5.39.28-PM-1-scaled-e1698841246352.jpeg",
-          "quantity": 1
-        }
-      ],
+      "cart": [],
       "address": {
         "fullName": "hashin",
         "mobile": "0974511840",
