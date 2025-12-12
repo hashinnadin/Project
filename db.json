@@ -31,9 +31,23 @@
           "name": "Special Chocolate Cake",
           "price": 650,
           "image": "/cake/cake6.jpg"
+        },
+        {
+          "productId": "1",
+          "name": "Straw Velvet Cake",
+          "price": 800,
+          "image": "/cake/cake1.avif"
         }
       ],
-      "cart": [],
+      "cart": [
+        {
+          "productId": "10",
+          "name": "Chocolate Strawberry Bento Cake",
+          "price": 950,
+          "image": "/cake/Chocolate_StrawberryBentoCake.jpg",
+          "quantity": 1
+        }
+      ],
       "address": {
         "fullName": "hashin",
         "mobile": "0974511840",

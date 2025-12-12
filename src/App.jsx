@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-/* USER COMPONENTS */
 import Navbar from "./compenent/Navbar/Navbar";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -17,8 +16,7 @@ import Payment from "./pages/Payment";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 
-/* ADMIN COMPONENTS */
-// REMOVED: AdminNavbar import
+
 import Dashboard from "./admin/Dashboard";
 import AdminProducts from "./admin/AdminProducts";
 import AdminAddProducts from "./admin/AdminAddProducts";
@@ -67,7 +65,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* =========================== ADMIN ROUTES =========================== */}
+
         <Route
           path="/admin"
           element={
@@ -122,7 +120,6 @@ function App() {
           }
         />
 
-        {/* ============================ PUBLIC ROUTES ========================== */}
         <Route
           path="/register"
           element={
@@ -141,7 +138,8 @@ function App() {
           }
         />
 
-        {/* ============================== USER ROUTES ========================== */}
+    
+    
         <Route
           path="/"
           element={
@@ -206,7 +204,6 @@ function App() {
           } 
         />
 
-        {/* ------------------ UNKNOWN ROUTES REDIRECT ------------------------- */}
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/admin-login" element={<Navigate to="/login" replace />} />
 
