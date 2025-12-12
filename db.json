@@ -109,6 +109,25 @@
         "pincode": "676305",
         "state": "kerala"
       }
+    },
+    {
+      "id": "1267",
+      "username": "manhar",
+      "email": "manhar@gmail.com",
+      "password": "1234",
+      "status": "active",
+      "createdAt": "2025-12-12T08:23:40.006Z",
+      "cart": [],
+      "wishlist": [],
+      "address": {
+        "fullName": "Manhar",
+        "mobile": "0974511840",
+        "house": "kolappuram",
+        "street": "klpm",
+        "city": "vengara",
+        "pincode": "676305",
+        "state": "kerala"
+      }
     }
   ],
   "products": [
